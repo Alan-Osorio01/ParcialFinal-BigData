@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transaction",
+  "type": "object",
+  "required": ["tx_id", "user_id", "session_id", "product_id", "amount", "status", "created_at"],
+  "properties": {
+    "tx_id": {"type": "string", "format": "uuid"},
+    "user_id": {"type": "string", "format": "uuid"},
+    "session_id": {"type": "string", "format": "uuid"},
+    "product_id": {"type": "string", "format": "uuid"},
+    "amount": {"type": "number", "minimum": 0},
+    "status": {"type": "string", "enum": ["completed", "failed", "pending"]},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

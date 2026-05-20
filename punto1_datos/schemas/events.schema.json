@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Event (superclase con 5 subtipos)",
+  "type": "object",
+  "required": ["event_id", "event_type", "user_id", "session_id", "timestamp"],
+  "properties": {
+    "event_id": {"type": "string", "format": "uuid"},
+    "event_type": {
+      "type": "string",
+      "enum": ["page_view", "click", "search", "product_view", "cart_event"]
+    },
+    "user_id": {"type": "string", "format": "uuid"},
+    "session_id": {"type": "string", "format": "uuid"},
+    "timestamp": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"event_type": {"const": "page_view"}}},
+      "then": {
+        "required": ["page_url", "page_type", "time_on_page_seconds", "device_type", "country"],
+        "properties": {
+          "page_url": {"type": "string"},
+          "page_type": {"type": "string", "enum": ["home", "category", "product", "cart", "checkout", "search"]},
+          "time_on_page_seconds": {"type": "integer", "minimum": 0},
+          "referrer": {"type": "string"},
+          "device_type": {"type": "string", "enum": ["mobile", "desktop", "tablet"]},
+          "country": {"type": "string", "minLength": 2, "maxLength": 2}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "click"}}},
+      "then": {
+        "required": ["element_id", "element_type", "page_url", "x_position", "y_position"],
+        "properties": {
+          "element_id": {"type": "string"},
+          "element_type": {"type": "string"},
+          "page_url": {"type": "string"},
+          "x_position": {"type": "integer", "minimum": 0},
+          "y_position": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "search"}}},
+      "then": {
+        "required": ["query", "results_count"],
+        "properties": {
+          "query": {"type": "array", "items": {"type": "string"}},
+          "results_count": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "product_view"}}},
+      "then": {
+        "required": ["product_id", "category", "price", "time_on_page_seconds"],
+        "properties": {
+          "product_id": {"type": "string", "format": "uuid"},
+          "category": {"type": "string"},
+          "price": {"type": "number", "exclusiveMinimum": 0},
+          "time_on_page_seconds": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"const": "cart_event"}}},
+      "then": {
+        "required": ["product_id", "action"],
+        "properties": {
+          "product_id": {"type": "string", "format": "uuid"},
+          "action": {"type": "string", "enum": ["add", "remove"]}
+        }
+      }
+    }
+  ]
+}

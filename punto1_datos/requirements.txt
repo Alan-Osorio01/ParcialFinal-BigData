@@ -1,0 +1,6 @@
+# Dependencias del módulo de generación de datos sintéticos
+faker>=22.0.0
+numpy>=1.26.0
+pandas>=2.1.0
+tqdm>=4.66.0
+boto3>=1.34.0

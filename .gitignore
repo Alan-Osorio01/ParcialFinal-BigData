@@ -1,0 +1,71 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# ===== Entornos virtuales =====
+venv/
+env/
+ENV/
+.venv/
+
+# ===== Variables de entorno y secretos =====
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+aws-credentials.txt
+config.ini
+
+# ===== Datos generados (no subir a git) =====
+data_output/
+data_local/
+*.jsonl
+*.parquet
+events_*.json
+
+# ===== AWS / IaC artifacts =====
+.aws-sam/
+cdk.out/
+.serverless/
+zappa_settings.local.json
+*.zip
+lambda_package/
+
+# ===== EMR / Spark =====
+spark-warehouse/
+metastore_db/
+derby.log
+*.crc
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ===== IDEs =====
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Outputs sensibles =====
+infra/rds_endpoint.txt
+infra/lambda_arn.txt
+infra/api_url.txt

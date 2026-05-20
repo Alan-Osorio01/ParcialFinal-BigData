@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Session",
+  "type": "object",
+  "required": ["session_id", "user_id", "started_at", "device_type", "country"],
+  "properties": {
+    "session_id": {"type": "string", "format": "uuid"},
+    "user_id": {"type": "string", "format": "uuid"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "device_type": {"type": "string", "enum": ["mobile", "desktop", "tablet"]},
+    "country": {"type": "string", "minLength": 2, "maxLength": 2}
+  }
+}

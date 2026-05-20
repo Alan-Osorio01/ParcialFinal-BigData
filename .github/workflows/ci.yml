@@ -1,0 +1,80 @@
+name: ShopStream CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r punto1_datos/requirements.txt
+          pip install -r punto2_ingesta/requirements.txt
+
+      - name: Lint con flake8
+        run: |
+          # Errores críticos: parar el build
+          flake8 punto1_datos punto2_ingesta infra \
+            --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Avisos (no falla): estilo
+          flake8 punto1_datos punto2_ingesta infra \
+            --count --max-line-length=120 --statistics --exit-zero
+
+      - name: Tests punto1_datos
+        run: pytest punto1_datos/tests/ -v --tb=short
+
+      - name: Tests punto2_ingesta
+        run: pytest punto2_ingesta/tests/ -v --tb=short
+
+      - name: Cobertura combinada
+        run: |
+          pytest --cov=punto1_datos --cov=punto2_ingesta \
+            --cov-report=term-missing --cov-report=xml \
+            punto1_datos/tests/ punto2_ingesta/tests/
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          if-no-files-found: warn
+
+  validate-lambda-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verificar que Lambda zip se construye
+        run: |
+          pip install boto3
+          python - <<'PY'
+          import io, zipfile, pathlib
+          src = pathlib.Path("punto2_ingesta")
+          buf = io.BytesIO()
+          with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+              for f in ("lambda_function.py", "validators.py"):
+                  zf.write(src / f, arcname=f)
+          buf.seek(0)
+          print(f"Lambda zip ok: {len(buf.getvalue()) / 1024:.1f} KB")
+          PY

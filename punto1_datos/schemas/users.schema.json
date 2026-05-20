@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "type": "object",
+  "required": ["user_id", "email", "country", "created_at", "device_preference"],
+  "properties": {
+    "user_id": {"type": "string", "format": "uuid"},
+    "name": {"type": "string"},
+    "email": {"type": "string", "format": "email"},
+    "country": {"type": "string", "minLength": 2, "maxLength": 2},
+    "created_at": {"type": "string", "format": "date-time"},
+    "device_preference": {"type": "string", "enum": ["mobile", "desktop", "tablet"]}
+  }
+}

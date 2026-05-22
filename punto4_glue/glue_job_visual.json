@@ -1,0 +1,477 @@
+{
+	"dag": {
+		"node-1779420938867": {
+			"classification": "DataSource",
+			"type": "Catalog",
+			"name": "Source_S3_top_pages",
+			"inputs": [],
+			"database": "shopstream_glue_db",
+			"table": "top_pages_time",
+			"runtimeParameters": [],
+			"iconUrl": "https://a.b.cdn.console.awsstatic.com/a/v1/Q2AYUCKJD5X3UVZL2QAXYBL7AKGGLR4UZA4266YOAK3XW56D6WVA/static/media/data-catalog.8b8a27f5.svg",
+			"generatedNodeName": "Source_S3_top_pages_node1779420938867",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "page_url",
+						"fullPath": [
+							"page_url"
+						],
+						"type": "string"
+					},
+					{
+						"key": "date",
+						"fullPath": [
+							"date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "avg_time_seconds",
+						"fullPath": [
+							"avg_time_seconds"
+						],
+						"type": "double"
+					},
+					{
+						"key": "total_views",
+						"fullPath": [
+							"total_views"
+						],
+						"type": "long"
+					},
+					{
+						"key": "year",
+						"fullPath": [
+							"year"
+						],
+						"type": "string"
+					},
+					{
+						"key": "month",
+						"fullPath": [
+							"month"
+						],
+						"type": "string"
+					},
+					{
+						"key": "day",
+						"fullPath": [
+							"day"
+						],
+						"type": "string"
+					}
+				]
+			]
+		},
+		"node-1779421053878": {
+			"classification": "Transform",
+			"type": "EvaluateDataQualityMultiFrame",
+			"name": "Evaluate Data Quality",
+			"inputs": [
+				"node-1779420938867"
+			],
+			"ruleset": "Rules = [\n    IsComplete \"page_url\",\n    IsComplete \"date\",\n    ColumnValues \"avg_time_seconds\" >= 0,\n    ColumnValues \"total_views\" >= 0,\n    ColumnValues \"bounce_rate\" between 0 and 100\n]",
+			"publishingOptions": {
+				"resultsPublishingEnabled": true,
+				"cloudWatchMetricsEnabled": true,
+				"resultsS3Prefix": ""
+			},
+			"stopJobOnFailureOptions": {},
+			"additionalOptions": {
+				"performanceTuning.caching": "CACHE_NOTHING"
+			},
+			"iconUrl": "https://a.b.cdn.console.awsstatic.com/a/v1/Q2AYUCKJD5X3UVZL2QAXYBL7AKGGLR4UZA4266YOAK3XW56D6WVA/static/media/Data-quality.30e03756.svg",
+			"generatedNodeName": "EvaluateDataQuality_node1779421053878",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "Rule",
+						"fullPath": [
+							"Rule"
+						],
+						"type": "string"
+					},
+					{
+						"key": "Outcome",
+						"fullPath": [
+							"Outcome"
+						],
+						"type": "string"
+					},
+					{
+						"key": "FailureReason",
+						"fullPath": [
+							"FailureReason"
+						],
+						"type": "string"
+					},
+					{
+						"key": "EvaluatedMetrics",
+						"fullPath": [
+							"EvaluatedMetrics"
+						],
+						"type": "object",
+						"children": [
+							{
+								"key": "string",
+								"fullPath": [
+									"EvaluatedMetrics",
+									"string"
+								],
+								"type": "double"
+							}
+						]
+					},
+					{
+						"key": "EvaluatedRule",
+						"fullPath": [
+							"EvaluatedRule"
+						],
+						"type": "string"
+					}
+				],
+				[
+					{
+						"key": "page_url",
+						"fullPath": [
+							"page_url"
+						],
+						"type": "string"
+					},
+					{
+						"key": "date",
+						"fullPath": [
+							"date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "avg_time_seconds",
+						"fullPath": [
+							"avg_time_seconds"
+						],
+						"type": "double"
+					},
+					{
+						"key": "total_views",
+						"fullPath": [
+							"total_views"
+						],
+						"type": "long"
+					},
+					{
+						"key": "year",
+						"fullPath": [
+							"year"
+						],
+						"type": "string"
+					},
+					{
+						"key": "month",
+						"fullPath": [
+							"month"
+						],
+						"type": "string"
+					},
+					{
+						"key": "day",
+						"fullPath": [
+							"day"
+						],
+						"type": "string"
+					},
+					{
+						"key": "DataQualityRulesPass",
+						"fullPath": [
+							"DataQualityRulesPass"
+						],
+						"type": "string array"
+					},
+					{
+						"key": "DataQualityRulesFail",
+						"fullPath": [
+							"DataQualityRulesFail"
+						],
+						"type": "string array"
+					},
+					{
+						"key": "DataQualityRulesSkip",
+						"fullPath": [
+							"DataQualityRulesSkip"
+						],
+						"type": "string array"
+					},
+					{
+						"key": "DataQualityEvaluationResult",
+						"fullPath": [
+							"DataQualityEvaluationResult"
+						],
+						"type": "string"
+					}
+				],
+				[
+					{
+						"key": "page_url",
+						"fullPath": [
+							"page_url"
+						],
+						"type": "string"
+					},
+					{
+						"key": "date",
+						"fullPath": [
+							"date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "avg_time_seconds",
+						"fullPath": [
+							"avg_time_seconds"
+						],
+						"type": "double"
+					},
+					{
+						"key": "total_views",
+						"fullPath": [
+							"total_views"
+						],
+						"type": "long"
+					},
+					{
+						"key": "year",
+						"fullPath": [
+							"year"
+						],
+						"type": "string"
+					},
+					{
+						"key": "month",
+						"fullPath": [
+							"month"
+						],
+						"type": "string"
+					},
+					{
+						"key": "day",
+						"fullPath": [
+							"day"
+						],
+						"type": "string"
+					}
+				]
+			]
+		},
+		"node-1779421150103": {
+			"classification": "Transform",
+			"type": "SelectFromCollection",
+			"name": "originalData",
+			"index": 0,
+			"inputs": [
+				"node-1779421053878"
+			],
+			"generatedNodeName": "originalData_node1779421150103",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "page_url",
+						"fullPath": [
+							"page_url"
+						],
+						"type": "string"
+					},
+					{
+						"key": "date",
+						"fullPath": [
+							"date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "avg_time_seconds",
+						"fullPath": [
+							"avg_time_seconds"
+						],
+						"type": "double"
+					},
+					{
+						"key": "total_views",
+						"fullPath": [
+							"total_views"
+						],
+						"type": "long"
+					},
+					{
+						"key": "year",
+						"fullPath": [
+							"year"
+						],
+						"type": "string"
+					},
+					{
+						"key": "month",
+						"fullPath": [
+							"month"
+						],
+						"type": "string"
+					},
+					{
+						"key": "day",
+						"fullPath": [
+							"day"
+						],
+						"type": "string"
+					}
+				]
+			]
+		},
+		"node-1779421256539": {
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"name": "Change Schema",
+			"inputs": [
+				"node-1779421150103"
+			],
+			"mapping": [
+				{
+					"toKey": "page_url",
+					"fromPath": [
+						"page_url"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false
+				},
+				{
+					"toKey": "date",
+					"fromPath": [
+						"date"
+					],
+					"toType": "date",
+					"fromType": "date",
+					"dropped": false
+				},
+				{
+					"toKey": "avg_time_seconds",
+					"fromPath": [
+						"avg_time_seconds"
+					],
+					"toType": "decimal",
+					"fromType": "double",
+					"dropped": false
+				},
+				{
+					"toKey": "total_views",
+					"fromPath": [
+						"total_views"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false
+				},
+				{
+					"toKey": "year",
+					"fromPath": [
+						"year"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": true
+				},
+				{
+					"toKey": "month",
+					"fromPath": [
+						"month"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": true
+				},
+				{
+					"toKey": "day",
+					"fromPath": [
+						"day"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": true
+				}
+			],
+			"iconUrl": "https://a.b.cdn.console.awsstatic.com/a/v1/Q2AYUCKJD5X3UVZL2QAXYBL7AKGGLR4UZA4266YOAK3XW56D6WVA/static/media/Apply-mapping.2595af12.svg",
+			"generatedNodeName": "ChangeSchema_node1779421256539",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "page_url",
+						"fullPath": [
+							"page_url"
+						],
+						"type": "string"
+					},
+					{
+						"key": "date",
+						"fullPath": [
+							"date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "avg_time_seconds",
+						"fullPath": [
+							"avg_time_seconds"
+						],
+						"type": "decimal"
+					},
+					{
+						"key": "total_views",
+						"fullPath": [
+							"total_views"
+						],
+						"type": "long"
+					}
+				]
+			]
+		}
+	},
+	"jobConfig": {
+		"command": "glueetl",
+		"description": "",
+		"role": "arn:aws:iam::629685010172:role/LabRole",
+		"scriptName": "shopstream-etl-s3-to-rds.py",
+		"version": "5.1",
+		"language": "python-3",
+		"scriptLocation": "s3://aws-glue-assets-629685010172-us-east-1/scripts/",
+		"temporaryDirectory": "s3://aws-glue-assets-629685010172-us-east-1/temporary/",
+		"timeout": "10",
+		"maxConcurrentRuns": 1,
+		"workerType": "G.1X",
+		"numberOfWorkers": "2",
+		"maxRetries": 0,
+		"metrics": true,
+		"observabilityMetrics": true,
+		"security": "none",
+		"bookmark": "job-bookmark-disable",
+		"logging": true,
+		"spark": true,
+		"sparkConfiguration": "standard",
+		"sparkPath": "s3://aws-glue-assets-629685010172-us-east-1/sparkHistoryLogs/",
+		"serverEncryption": false,
+		"glueHiveMetastore": true,
+		"etlAutoScaling": false,
+		"etlAutoTuning": true,
+		"jobParameters": [],
+		"tags": [],
+		"connectionsList": [],
+		"jobMode": "DEVELOPER_MODE",
+		"name": "shopstream-etl-s3-to-rds",
+		"dataLineage": false,
+		"pythonPath": null
+	},
+	"hasBeenSaved": false,
+	"script": "import sys\nfrom awsglue.transforms import *\nfrom awsglue.utils import getResolvedOptions\nfrom pyspark.context import SparkContext\nfrom awsglue.context import GlueContext\nfrom awsglue.job import Job\nfrom awsgluedq.transforms import EvaluateDataQuality\n\nargs = getResolvedOptions(sys.argv, ['JOB_NAME'])\nsc = SparkContext()\nglueContext = GlueContext(sc)\nspark = glueContext.spark_session\njob = Job(glueContext)\njob.init(args['JOB_NAME'], args)\n\n# Script generated for node Source_S3_top_pages\nSource_S3_top_pages_node1779420938867 = glueContext.create_dynamic_frame.from_catalog(database=\"shopstream_glue_db\", table_name=\"top_pages_time\", transformation_ctx=\"Source_S3_top_pages_node1779420938867\")\n\n# Script generated for node Evaluate Data Quality\nEvaluateDataQuality_node1779421053878_ruleset = \"\"\"\n    Rules = [\n        IsComplete \"page_url\",\n        IsComplete \"date\",\n        ColumnValues \"avg_time_seconds\" >= 0,\n        ColumnValues \"total_views\" >= 0,\n        ColumnValues \"bounce_rate\" between 0 and 100\n    ]\n\"\"\"\n\nEvaluateDataQuality_node1779421053878 = EvaluateDataQuality().process_rows(frame=Source_S3_top_pages_node1779420938867, ruleset=EvaluateDataQuality_node1779421053878_ruleset, publishing_options={\"dataQualityEvaluationContext\": \"EvaluateDataQuality_node1779421053878\", \"enableDataQualityCloudWatchMetrics\": True, \"enableDataQualityResultsPublishing\": True}, additional_options={\"performanceTuning.caching\":\"CACHE_NOTHING\"})\n\n# Script generated for node originalData\noriginalData_node1779421150103 = SelectFromCollection.apply(dfc=EvaluateDataQuality_node1779421053878, key=\"originalData\", transformation_ctx=\"originalData_node1779421150103\")\n\n# Script generated for node Change Schema\nChangeSchema_node1779421256539 = ApplyMapping.apply(frame=originalData_node1779421150103, mappings=[(\"page_url\", \"string\", \"page_url\", \"string\"), (\"date\", \"date\", \"date\", \"date\"), (\"avg_time_seconds\", \"double\", \"avg_time_seconds\", \"decimal\"), (\"total_views\", \"long\", \"total_views\", \"long\")], transformation_ctx=\"ChangeSchema_node1779421256539\")\n\n# Escribir a RDS PostgreSQL\nconnection_options = {\n    \"url\": \"jdbc:postgresql://shopstream-rds-dw.cavmfs9savk3.us-east-1.rds.amazonaws.com:5432/postgres\",\n    \"dbtable\": \"shopstream.fact_page_metrics\",\n    \"user\": \"Admin_postgres\",\n    \"password\": \"parcialfinal3\",\n    \"driver\": \"org.postgresql.Driver\"\n}\n\nglueContext.write_dynamic_frame.from_options(\n    frame=ChangeSchema_node1779421256539,\n    connection_type=\"jdbc\",\n    connection_options=connection_options,\n    transformation_ctx=\"write_to_rds\"\n)\n\njob.commit()"
+}

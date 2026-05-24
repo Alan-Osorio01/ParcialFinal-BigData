@@ -1,0 +1,29 @@
+{
+  "workflow_name": "shopstream-daily-workflow",
+  "triggers": [
+    {
+      "name": "shopstream-daily-schedule",
+      "type": "SCHEDULED",
+      "schedule": "cron(0 2 * * ? *)",
+      "description": "Ejecuta el workflow diariamente a 2:00 AM UTC",
+      "actions": ["shopstream-etl-s3-to-rds"]
+    },
+    {
+      "name": "shopstream-conditional-load",
+      "type": "CONDITIONAL",
+      "conditions": [
+        {
+          "job_name": "shopstream-etl-s3-to-rds",
+          "state": "SUCCEEDED"
+        }
+      ],
+      "description": "Si el ETL termina exitosamente, corre el crawler",
+      "actions": ["shopstream-processed-crawler"]
+    }
+  ],
+  "sns_alert": {
+    "topic": "shopstream-alerts",
+    "arn": "arn:aws:sns:us-east-1:629685010172:shopstream-alerts",
+    "endpoint": "analopez022026@gmail.com"
+  }
+}

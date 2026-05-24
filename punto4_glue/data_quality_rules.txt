@@ -1,0 +1,16 @@
+ShopStream Glue Data Quality Rules
+===================================
+Aplicadas en el nodo "Evaluate Data Quality" del job shopstream-etl-s3-to-rds
+
+Fuente: s3://shopstream-processed-aad/metrics/top_pages_time/
+
+Rules = [
+    IsComplete "page_url",           -- page_url nunca puede ser nulo
+    IsComplete "date",               -- date nunca puede ser nulo
+    ColumnValues "avg_time_seconds" >= 0,  -- tiempo no puede ser negativo
+    ColumnValues "total_views" >= 0,       -- views no puede ser negativo
+    ColumnValues "bounce_rate" between 0 and 100  -- bounce rate es porcentaje 0-100
+]
+
+Action if fails: Send to separate output
+Threshold: registros con datos inválidos se separan, no rompen el pipeline.

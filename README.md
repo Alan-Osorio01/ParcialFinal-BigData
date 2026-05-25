@@ -63,12 +63,16 @@ ParcialFinal-BigData/
 
 ## Setup Inicial
 
-1. Clonar el repo y configurar credenciales AWS Academy:
+1. Clonar el repo y configurar credenciales AWS Academy (en `.env`, no toca `~/.aws/`):
    ```bash
    git clone <repo>
    cd ParcialFinal-BigData
-   bash scripts/aws_setup.sh
+   cp .env.example .env          # solo la primera vez
+   nano .env                     # pega aws_access_key_id, secret y session_token de Academy
+   source scripts/load_aws_env.sh # cárgalas a tu shell actual
    ```
+   > Las credenciales viven en `.env` (gitignoreado). Cuando expiren cada ~4 h,
+   > solo editas `.env` y vuelves a sourcear el script.
 
 2. Crear entorno virtual e instalar dependencias:
    ```bash

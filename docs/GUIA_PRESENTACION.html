@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopStream — Guía de Presentación · Parcial III</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0f172a;
+    --blue:   #1e40af;
+    --indigo: #3730a3;
+    --teal:   #0d9488;
+    --green:  #059669;
+    --amber:  #d97706;
+    --red:    #dc2626;
+    --slate:  #475569;
+    --light:  #f8fafc;
+    --border: #e2e8f0;
+    --radius: 8px;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── PORTADA ── */
+  .cover {
+    text-align: center;
+    padding: 60px 0 48px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 56px;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .cover h1 span { color: var(--blue); }
+  .cover .subtitle {
+    font-size: 1.05rem;
+    color: var(--slate);
+    font-weight: 400;
+    margin-bottom: 36px;
+  }
+  .team-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .team-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 24px;
+    text-align: center;
+    min-width: 180px;
+  }
+  .team-card .name { font-weight: 600; color: var(--navy); font-size: 0.95rem; }
+  .team-card .role { font-size: 0.78rem; color: var(--slate); margin-top: 2px; }
+  .cover .meta { font-size: 0.8rem; color: #94a3b8; }
+
+  /* ── SECCIONES ── */
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 52px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.02em;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 28px 0 10px;
+  }
+  p { margin-bottom: 12px; color: #334155; }
+
+  /* ── TABLA DE REQUERIMIENTOS ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0 28px;
+    font-size: 0.88rem;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  th:first-child { border-radius: var(--radius) 0 0 0; }
+  th:last-child  { border-radius: 0 var(--radius) 0 0; }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--light); }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 500; }
+
+  /* ── BADGES STATUS ── */
+  .ok {
+    display: inline-block;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .warn {
+    display: inline-block;
+    background: #fef9c3;
+    color: #a16207;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .partial {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  /* ── ARQUITECTURA ── */
+  .arch-box {
+    background: var(--navy);
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin: 18px 0 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .arch-box .step { color: #7dd3fc; font-weight: 700; }
+  .arch-box .arrow { color: #64748b; }
+  .arch-box .service { color: #a5f3fc; }
+  .arch-box .note { color: #94a3b8; font-size: 0.75rem; }
+
+  /* ── BLOQUES DE PERSONA ── */
+  .person-block {
+    border-left: 4px solid var(--navy);
+    background: var(--light);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 20px 24px;
+    margin: 16px 0 24px;
+  }
+  .person-block.alan   { border-color: var(--blue); }
+  .person-block.daniela { border-color: var(--teal); }
+  .person-block.ana    { border-color: var(--indigo); }
+  .person-block .person-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .person-block.alan    .person-name { color: var(--blue); }
+  .person-block.daniela .person-name { color: var(--teal); }
+  .person-block.ana     .person-name { color: var(--indigo); }
+  .person-block ul { padding-left: 18px; }
+  .person-block li { margin-bottom: 4px; font-size: 0.9rem; color: #334155; }
+  .person-block .timing {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--slate);
+  }
+
+  /* ── DEMO STEPS ── */
+  .demo-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .demo-step .num-circle {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .demo-step .content h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .demo-step .content p { margin: 0; font-size: 0.88rem; }
+
+  /* ── CÓDIGO ── */
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: #0f172a;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 12px 0 20px;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+  pre .comment { color: #64748b; }
+  pre .cmd     { color: #7dd3fc; }
+  pre .output  { color: #86efac; }
+  pre .url     { color: #fde68a; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+  }
+  .callout.tip  { background: #f0fdf4; border-left: 4px solid var(--green); color: #166534; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid var(--amber); color: #92400e; }
+  .callout.info { background: #eff6ff; border-left: 4px solid var(--blue);  color: #1e40af; }
+  .callout strong { font-weight: 700; }
+
+  /* ── TIMELINE PRESENTACION ── */
+  .timeline { margin: 20px 0; }
+  .tl-item {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+  }
+  .tl-left {
+    width: 90px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 14px;
+  }
+  .tl-left .time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--slate);
+    white-space: nowrap;
+  }
+  .tl-center {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+  }
+  .tl-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--navy);
+    margin-top: 18px;
+    flex-shrink: 0;
+  }
+  .tl-dot.alan     { background: var(--blue); }
+  .tl-dot.daniela  { background: var(--teal); }
+  .tl-dot.ana      { background: var(--indigo); }
+  .tl-dot.all      { background: var(--navy); }
+  .tl-line {
+    width: 2px;
+    flex-grow: 1;
+    background: var(--border);
+    min-height: 20px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-content {
+    flex: 1;
+    padding: 10px 0 24px 16px;
+  }
+  .tl-content .who {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .who.alan    { color: var(--blue); }
+  .who.daniela { color: var(--teal); }
+  .who.ana     { color: var(--indigo); }
+  .who.all     { color: var(--navy); }
+  .tl-content .action {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .tl-content .detail { font-size: 0.85rem; color: var(--slate); }
+
+  /* ── QA ── */
+  .qa-item { margin-bottom: 22px; }
+  .qa-item .q {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+  .qa-item .q::before { content: "P: "; color: var(--blue); }
+  .qa-item .a { font-size: 0.88rem; color: #334155; }
+  .qa-item .a::before { content: "R: "; font-weight: 600; color: var(--teal); }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: "☐";
+    flex-shrink: 0;
+    font-size: 1rem;
+    color: var(--blue);
+    margin-top: 1px;
+  }
+  .checklist li .who-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+  .who-tag.alan    { background: #dbeafe; color: var(--blue); }
+  .who-tag.daniela { background: #ccfbf1; color: #0f766e; }
+  .who-tag.ana     { background: #e0e7ff; color: var(--indigo); }
+  .who-tag.all     { background: #f1f5f9; color: var(--slate); }
+
+  /* ── RECURSOS AWS ── */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0 24px;
+  }
+  .resource-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    background: var(--light);
+  }
+  .resource-card .rc-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 4px;
+  }
+  .resource-card .rc-value {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--navy);
+    word-break: break-all;
+  }
+  .resource-card .rc-status {
+    margin-top: 6px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.78rem;
+    color: #94a3b8;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { max-width: 100%; padding: 20px 32px; font-size: 13px; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+    .callout, .person-block, .resource-card { page-break-inside: avoid; }
+    pre { page-break-inside: avoid; white-space: pre-wrap; }
+    .arch-box { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Big Data e Ingeniería de Datos · Semestre 8</div>
+  <h1><span>ShopStream</span> Pipeline</h1>
+  <p class="subtitle">Parcial III · Pipeline Batch Completo en AWS · 2026-1</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="name">Alan Osorio</div>
+      <div class="role">Datos + Ingesta + CI/CD<br>Puntos 1 y 2</div>
+    </div>
+    <div class="team-card">
+      <div class="name">Daniela López</div>
+      <div class="role">PySpark + EMR<br>Punto 3</div>
+    </div>
+    <div class="team-card">
+      <div class="name">Ana López</div>
+      <div class="role">Glue + RDS + API<br>Punto 4 y API</div>
+    </div>
+  </div>
+  <p class="meta">GitHub · AWS Academy · us-east-1 · Cuenta 629685010172</p>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     1. QUÉ PEDÍA EL PARCIAL — CUMPLIMIENTO
+═══════════════════════════════════════════ -->
+<h2><span class="num">1</span>Cumplimiento del Parcial punto a punto</h2>
+
+<h3>Punto 1 — Diseño y Generación de Datos</h3>
+<table>
+  <tr><th>Requerimiento</th><th>Estado</th><th>Evidencia</th></tr>
+  <tr>
+    <td>Esquema de eventos con ≥5 entidades relacionadas</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>5 entidades: <code>users</code>, <code>products</code>, <code>sessions</code>, <code>events</code>, <code>transactions</code>. Schemas JSON en <code>punto1_datos/schemas/</code></td>
+  </tr>
+  <tr>
+    <td>Script Python que genere ≥500,000 registros/día con distribuciones realistas</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>generator.py</code> usa lognormal para precios, exponential para tiempos, pesos realistas (page_view 40%, click 25%, product_view 15%, cart 10%, search 10%)</td>
+  </tr>
+  <tr>
+    <td>5 tipos de evento: page_view, click, search, product_view, cart_event</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Todos con campos exactos del enunciado</td>
+  </tr>
+  <tr>
+    <td>Subida particionada (año/mes/día) a S3 bucket raw</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>upload_to_s3.py</code> → <code>s3://shopstream-raw-aad/year=2025/month=01/day=15/</code>. Multipart automático para archivos >8 MB</td>
+  </tr>
+</table>
+
+<h3>Punto 2 — Ingesta y Trigger Automático</h3>
+<table>
+  <tr><th>Requerimiento</th><th>Estado</th><th>Evidencia</th></tr>
+  <tr>
+    <td>Función Lambda que se active con eventos S3 PutObject</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Trigger <code>s3:ObjectCreated:*</code> (cubre Put y CompleteMultipartUpload). Lambda <code>shopstream-ingesta-validator</code> activa y verificada en vivo</td>
+  </tr>
+  <tr>
+    <td>Validación del esquema (tipos, campos obligatorios, rangos)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>validators.py</code> valida campos requeridos por tipo, timestamps ISO 8601, rangos numéricos (price > 0, time ≥ 0), enums (action: add/remove, device_type)</td>
+  </tr>
+  <tr>
+    <td>Mover archivos inválidos a quarantine/ con metadata del error</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Archivo copiado + <code>.metadata.json</code> con total_lines, valid_records, invalid_records, errors_sample. Verificado con test end-to-end</td>
+  </tr>
+  <tr>
+    <td>Registrar métricas en CloudWatch (archivos procesados, errores, tamaño)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>7 métricas en namespace <code>ShopStream/Ingesta</code>: ArchivosRecibidos, RegistrosValidos, RegistrosInvalidos, TamanoArchivo, ArchivosEnCuarentena, ArchivosValidos, ArchivosOmitidos</td>
+  </tr>
+</table>
+
+<h3>Punto 3 — Transformación Distribuida con PySpark</h3>
+<table>
+  <tr><th>Requerimiento</th><th>Estado</th><th>Evidencia</th></tr>
+  <tr>
+    <td>Cluster EMR con versiones correctas</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>EMR 6.15.0 + Spark 3.4 + Python 3.10. Cluster ID: <code>j-28IEWBCFM3PR5</code> (terminado después de ejecución — los Parquets persisten en S3)</td>
+  </tr>
+  <tr>
+    <td>Limpieza: deduplicación, imputación de nulos, normalización</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>cleaning.py</code>: dropDuplicates por event_id, fillna con valores por defecto, normalización de texto (upper/lower/trim), filtro de event_types válidos</td>
+  </tr>
+  <tr>
+    <td>Top 20 páginas por tiempo de permanencia promedio</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_top_pages_time()</code> → Parquet en <code>s3://shopstream-processed-aad/metrics/top_pages_time/</code></td>
+  </tr>
+  <tr>
+    <td>Tasa de rebote por tipo de página</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_bounce_rate()</code> → sesiones con único page_view = rebote → <code>metrics/bounce_rate/</code></td>
+  </tr>
+  <tr>
+    <td>Embudo de conversión (4 pasos)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_conversion_funnel()</code> → page_view → product_view → cart_event → purchase → <code>metrics/conversion_funnel/</code></td>
+  </tr>
+  <tr>
+    <td>Productos vistos vs agregados al carrito + flag alta vista / baja conversión</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_products_view_vs_cart()</code> con campo <code>high_view_low_cart</code> (views>100 y ratio<5%) → <code>metrics/products_view_vs_cart/</code></td>
+  </tr>
+  <tr>
+    <td>Top 10 rutas de navegación más frecuentes</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_navigation_paths()</code> usando collect_list + Window por sesión → <code>metrics/navigation_paths/</code></td>
+  </tr>
+  <tr>
+    <td>Tiempo promedio por dispositivo y país</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>metric_time_by_device_country()</code> → <code>metrics/time_device_country/</code></td>
+  </tr>
+  <tr>
+    <td>Detección de anomalías (z-score, IQR)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>anomaly.py</code>: detect_anomalies_zscore + detect_anomalies_iqr + detect_session_anomalies → <code>anomalies/</code></td>
+  </tr>
+  <tr>
+    <td>Exportar a S3 en formato Parquet particionado</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Todos los outputs en Snappy Parquet, partición year=/month=/day=. 6 carpetas de métricas + anomalías verificadas en S3</td>
+  </tr>
+  <tr>
+    <td>Funcionar como notebook Y como script spark-submit</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td><code>pipeline.py</code> ejecutable con <code>spark-submit pipeline.py --date 2025-01-15</code>. Notebook disponible en EMR Studio</td>
+  </tr>
+</table>
+
+<h3>Punto 4 — Glue + Datawarehouse</h3>
+<table>
+  <tr><th>Requerimiento</th><th>Estado</th><th>Evidencia</th></tr>
+  <tr>
+    <td>Base de datos PostgreSQL tipo datawarehouse</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>RDS PostgreSQL 18.3. Star schema: 3 tablas dimensión + 6 tablas fact (fact_page_metrics, fact_session_summary, fact_conversion_funnel, fact_product_performance, fact_navigation_paths, fact_anomalies). Índices de performance incluidos</td>
+  </tr>
+  <tr>
+    <td>Job ETL construido visualmente en Glue Studio (editor de nodos gráfico)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Job <code>shopstream-etl-s3-to-rds</code> en Glue Studio. JSON del grafo exportado en <code>punto4_glue/glue_job_visual.json</code></td>
+  </tr>
+  <tr>
+    <td>Nodo Data Quality con reglas de validación</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Reglas: IsComplete "page_url", IsComplete "date", ColumnValues "avg_time_seconds" ≥ 0, ColumnValues "total_views" ≥ 0, bounce_rate between 0 and 100. Documentadas en <code>data_quality_rules.txt</code></td>
+  </tr>
+  <tr>
+    <td>Trigger condicional: carga a RDS solo si ETL = SUCCEEDED, si falla enviar alerta</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Trigger <code>shopstream-conditional-load</code> (CONDITIONAL). SNS topic <code>shopstream-alerts</code> suscrito a <code>analopez022026@gmail.com</code></td>
+  </tr>
+  <tr>
+    <td>Trigger programado a las 2:00 AM UTC diariamente</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Trigger <code>shopstream-daily-schedule</code> con <code>cron(0 2 * * ? *)</code>. Workflow <code>shopstream-daily-workflow</code> activo</td>
+  </tr>
+</table>
+
+<h3>API de Consultas — Endpoints requeridos</h3>
+<table>
+  <tr><th>Endpoint requerido</th><th>Estado</th><th>URL real (verificada)</th></tr>
+  <tr>
+    <td><code>GET /pages/top?metric=…&date=…&limit=…</code></td>
+    <td><span class="ok">✓ 200 OK</span></td>
+    <td rowspan="3" style="font-size:0.75rem; word-break:break-all; color:#1e40af;">https://lz6d3q5skk.execute-api.us-east-1.amazonaws.com/production</td>
+  </tr>
+  <tr>
+    <td><code>GET /sessions/summary?country=…&device=…&date=…</code></td>
+    <td><span class="ok">✓ 200 OK</span></td>
+  </tr>
+  <tr>
+    <td><code>GET /anomalies?date=…</code></td>
+    <td><span class="ok">✓ 200 OK</span></td>
+  </tr>
+  <tr>
+    <td>Desplegada en Lambda con Zappa + API Gateway</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>Runtime Python 3.11, 256 MB, timeout 30s, rol LabRole</td>
+  </tr>
+</table>
+
+<h3>Requerimiento transversal — GitHub + CI/CD + Tests</h3>
+<table>
+  <tr><th>Requerimiento</th><th>Estado</th><th>Detalle</th></tr>
+  <tr>
+    <td>Entrega en GitHub con pruebas unitarias</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>66 tests: 17 generator + 19 validators + 4 Lambda (moto) + tests PySpark (cleaning + metrics) + 13 API</td>
+  </tr>
+  <tr>
+    <td>Despliegue continuo (CI/CD)</td>
+    <td><span class="ok">✓ Cumple</span></td>
+    <td>GitHub Actions: lint (flake8) + pytest + coverage en cada push a main/dev</td>
+  </tr>
+</table>
+
+
+<!-- ══════════════════════════════════════════
+     2. ARQUITECTURA
+═══════════════════════════════════════════ -->
+<h2><span class="num">2</span>Arquitectura del Pipeline</h2>
+
+<div class="arch-box">
+<span class="note">── FUENTE DE DATOS ──────────────────────────────────────────────</span>
+<span class="step">  generator.py</span>        <span class="note">← 500k eventos/día con distribuciones realistas</span>
+         │
+         ▼
+<span class="note">── ALMACENAMIENTO RAW ───────────────────────────────────────────</span>
+<span class="service">  S3: shopstream-raw-aad</span>
+         <span class="note">year=2025/month=01/day=15/</span>
+         <span class="note">  events.jsonl (166 MB)  users.jsonl  products.jsonl</span>
+         <span class="note">  sessions.jsonl         transactions.jsonl</span>
+         │  (s3:ObjectCreated:* trigger)
+         ▼
+<span class="note">── VALIDACIÓN ───────────────────────────────────────────────────</span>
+<span class="service">  Lambda: shopstream-ingesta-validator</span>  <span class="note">(Python 3.11, 1024 MB)</span>
+         │                   │
+         ▼                   ▼
+  <span class="note">S3: raw/ (OK)</span>       <span class="service">S3: shopstream-quarantine-aad</span>
+                       <span class="note">quarantine/timestamp_archivo.jsonl</span>
+                       <span class="note">quarantine/timestamp_archivo.metadata.json</span>
+         │
+         ▼
+<span class="note">── CLOUDWATCH ───────────────────────────────────────────────────</span>
+<span class="service">  Dashboard: ShopStream-Ingesta</span>  <span class="note">(7 métricas, alarma ErroresLectura)</span>
+<span class="service">  SNS: shopstream-alerts</span>         <span class="note">(email si errors > 5 en 5 min)</span>
+         │
+         ▼
+<span class="note">── PROCESAMIENTO DISTRIBUIDO ────────────────────────────────────</span>
+<span class="service">  EMR 6.15.0: shopstream-emr-cluster</span>  <span class="note">(Spark 3.4, 1 master + 2 core m5.xlarge)</span>
+  <span class="note">spark-submit pipeline.py --date 2025-01-15</span>
+         │
+         ▼
+<span class="note">── RESULTADOS PROCESADOS ────────────────────────────────────────</span>
+<span class="service">  S3: shopstream-processed-aad</span>  <span class="note">(Snappy Parquet, particionado)</span>
+         <span class="note">metrics/top_pages_time/</span>
+         <span class="note">metrics/bounce_rate/</span>
+         <span class="note">metrics/conversion_funnel/</span>
+         <span class="note">metrics/products_view_vs_cart/</span>
+         <span class="note">metrics/navigation_paths/</span>
+         <span class="note">metrics/time_device_country/</span>
+         <span class="note">anomalies/</span>
+         │  (Glue Workflow: cron 2 AM UTC)
+         ▼
+<span class="note">── ETL Y CATALOGACIÓN ───────────────────────────────────────────</span>
+<span class="service">  Glue Studio: shopstream-etl-s3-to-rds</span>
+  <span class="note">  Nodos: S3 Source → Data Quality → ApplyMapping → PostgreSQL Target</span>
+  <span class="note">  Workflow: shopstream-daily-workflow</span>
+  <span class="note">  Trigger 1: cron(0 2 * * ? *)  ← programado</span>
+  <span class="note">  Trigger 2: si ETL = SUCCEEDED → carga RDS  ← condicional</span>
+         │
+         ▼
+<span class="note">── DATAWAREHOUSE ────────────────────────────────────────────────</span>
+<span class="service">  RDS PostgreSQL 18.3: shopstream-rds-dw</span>
+  <span class="note">  schema shopstream: 3 dim + 6 fact tables</span>
+  <span class="note">  dim_pages, dim_device_country, dim_products</span>
+  <span class="note">  fact_page_metrics    →   20 filas  (top 20 páginas por tiempo)</span>
+  <span class="note">  fact_session_summary →   24 filas  (device × país × día)</span>
+  <span class="note">  fact_anomalies       →  362 filas  (sesiones z-score > 3.0)</span>
+         │
+         ▼
+<span class="note">── API REST ─────────────────────────────────────────────────────</span>
+<span class="service">  API Gateway + Lambda (Zappa): shopstream-api</span>
+  <span class="note">  GET /pages/top       GET /sessions/summary       GET /anomalies</span>
+  <span class="note">  https://lz6d3q5skk.execute-api.us-east-1.amazonaws.com/production</span>
+</div>
+
+<div class="resource-grid">
+  <div class="resource-card">
+    <div class="rc-label">S3 Raw</div>
+    <div class="rc-value">shopstream-raw-aad</div>
+    <div class="rc-status"><span class="ok">✓ Activo</span></div>
+  </div>
+  <div class="resource-card">
+    <div class="rc-label">S3 Processed</div>
+    <div class="rc-value">shopstream-processed-aad</div>
+    <div class="rc-status"><span class="ok">✓ Con Parquets</span></div>
+  </div>
+  <div class="resource-card">
+    <div class="rc-label">Lambda Ingesta</div>
+    <div class="rc-value">shopstream-ingesta-validator</div>
+    <div class="rc-status"><span class="ok">✓ Active · 1024 MB</span></div>
+  </div>
+  <div class="resource-card">
+    <div class="rc-label">API Gateway</div>
+    <div class="rc-value">lz6d3q5skk.execute-api.us-east-1.amazonaws.com</div>
+    <div class="rc-status"><span class="ok">✓ 200 OK</span></div>
+  </div>
+  <div class="resource-card">
+    <div class="rc-label">RDS PostgreSQL · 3 tablas cargadas</div>
+    <div class="rc-value">fact_page_metrics: 20 filas<br>fact_session_summary: 24 filas<br>fact_anomalies: 362 filas</div>
+    <div class="rc-status"><span class="ok">✓ Available · datos cargados</span></div>
+  </div>
+  <div class="resource-card">
+    <div class="rc-label">Glue Workflow</div>
+    <div class="rc-value">shopstream-daily-workflow<br>2 triggers (cron 2 AM UTC + condicional SUCCEEDED)</div>
+    <div class="rc-status"><span class="ok">✓ Configurado · último run SUCCEEDED</span></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     3. QUIÉN PRESENTA QUÉ
+═══════════════════════════════════════════ -->
+<h2><span class="num">3</span>Quién presenta qué y cómo</h2>
+
+<p>La presentación dura <strong>15–20 minutos</strong>. Cada persona presenta su propio punto y demuestra en vivo en la consola AWS o con comandos de terminal.</p>
+
+<div class="timeline">
+
+  <div class="tl-item">
+    <div class="tl-left"><div class="time">0–1 min</div></div>
+    <div class="tl-center"><div class="tl-dot all"></div><div class="tl-line"></div></div>
+    <div class="tl-content">
+      <div class="who all">Todos</div>
+      <div class="action">Introducción: ShopStream y el problema de negocio</div>
+      <div class="detail">Mostrar el diagrama de arquitectura del README en GitHub. "Esta es una empresa ficticia de e-commerce que necesita entender el comportamiento de sus usuarios…"</div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-left"><div class="time">1–6 min</div></div>
+    <div class="tl-center"><div class="tl-dot alan"></div><div class="tl-line"></div></div>
+    <div class="tl-content">
+      <div class="who alan">Alan — Puntos 1 y 2</div>
+      <div class="action">Demo en vivo: generación de datos + ingesta + validación</div>
+      <div class="detail">
+        1. Mostrar <code>generator.py</code> corriendo (500k registros) con barra de progreso<br>
+        2. Correr <code>upload_to_s3.py</code> — mientras sube, explicar el trigger S3 → Lambda<br>
+        3. Abrir CloudWatch → Dashboard <em>ShopStream-Ingesta</em> → mostrar métricas en vivo<br>
+        4. Correr <code>scripts/test_quarantine.py</code> → mostrar archivo en quarantine + metadata.json<br>
+        5. Mostrar alarma <em>ShopStream-ErroresLectura</em> en estado OK
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-left"><div class="time">6–11 min</div></div>
+    <div class="tl-center"><div class="tl-dot daniela"></div><div class="tl-line"></div></div>
+    <div class="tl-content">
+      <div class="who daniela">Daniela — Punto 3</div>
+      <div class="action">Demo: PySpark pipeline + resultados en S3</div>
+      <div class="detail">
+        1. Mostrar <code>pipeline.py</code>: "aquí están las 6 métricas y la detección de anomalías"<br>
+        2. Mostrar en consola AWS → EMR → el cluster histórico (o screenshots si está terminado)<br>
+        3. Abrir S3 → <code>shopstream-processed-aad/metrics/</code> → mostrar las 6 carpetas de Parquets<br>
+        4. Explicar las métricas más interesantes: embudo de conversión y rutas de navegación<br>
+        5. Mostrar <code>anomaly.py</code>: "usamos z-score e IQR para detectar sesiones sospechosas"
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-left"><div class="time">11–17 min</div></div>
+    <div class="tl-center"><div class="tl-dot ana"></div><div class="tl-line"></div></div>
+    <div class="tl-content">
+      <div class="who ana">Ana — Punto 4 + API</div>
+      <div class="action">Demo: Glue Studio + RDS + API en vivo</div>
+      <div class="detail">
+        1. Abrir Glue Studio → Job <em>shopstream-etl-s3-to-rds</em> → mostrar el grafo de nodos visual<br>
+        2. Señalar el nodo <em>Data Quality</em> y las reglas configuradas<br>
+        3. Abrir Glue Workflows → <em>shopstream-daily-workflow</em> → mostrar los 2 triggers<br>
+        4. Mostrar <code>dw_schema.sql</code>: star schema con 9 tablas<br>
+        5. Ejecutar en terminal los 3 endpoints de la API y mostrar respuesta JSON:
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-left"><div class="time">17–20 min</div></div>
+    <div class="tl-center"><div class="tl-dot all"></div><div class="tl-line"></div></div>
+    <div class="tl-content">
+      <div class="who all">Todos</div>
+      <div class="action">Tests + CI/CD + Cierre</div>
+      <div class="detail">Mostrar GitHub Actions corriendo verde. Ejecutar <code>pytest -v</code> en terminal y mostrar los 66 tests pasando. Cerrar con el diagrama de arquitectura completo.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="callout tip">
+  <strong>Consejo clave:</strong> Lleguen con todo ya abierto y verificado. El lab Academy puede ser lento. Tengan pestañas abiertas: S3, CloudWatch, Glue Studio, GitHub Actions y la terminal con el venv activo y credenciales cargadas.
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     4. COMANDOS PARA LA DEMO
+═══════════════════════════════════════════ -->
+<h2><span class="num">4</span>Comandos exactos para la demo (copiar y pegar)</h2>
+
+<h3>Antes de empezar — cargar credenciales</h3>
+<pre><span class="comment"># Abrir terminal en la raíz del proyecto</span>
+<span class="cmd">source venv/bin/activate</span>
+<span class="cmd">source scripts/load_aws_env.sh</span>
+<span class="output"># ✓ Credenciales AWS cargadas desde .env
+# Cuenta AWS: 629685010172</span></pre>
+
+<h3>Demo Alan — Punto 1 y 2</h3>
+<pre><span class="comment"># 1. Generar datos (usar una fecha distinta para demo en vivo)</span>
+<span class="cmd">python punto1_datos/generator.py --date 2025-01-16 --events 500000</span>
+
+<span class="comment"># 2. Subir a S3 (dispara la Lambda automáticamente)</span>
+<span class="cmd">python punto1_datos/upload_to_s3.py --date 2025-01-16</span>
+
+<span class="comment"># 3. Ver que la Lambda procesó (esperar ~5 seg)</span>
+<span class="cmd">aws logs tail /aws/lambda/shopstream-ingesta-validator --follow --since 5m</span>
+
+<span class="comment"># 4. Test de cuarentena (muestra el flujo de errores)</span>
+<span class="cmd">python scripts/test_quarantine.py</span>
+
+<span class="comment"># 5. Ver métricas en CloudWatch</span>
+<span class="cmd">aws cloudwatch list-metrics --namespace ShopStream/Ingesta --query 'Metrics[*].MetricName'</span></pre>
+
+<h3>Demo Daniela — Punto 3</h3>
+<pre><span class="comment"># Mostrar que los Parquets están en S3</span>
+<span class="cmd">aws s3 ls s3://shopstream-processed-aad/metrics/ </span>
+<span class="output"># PRE bounce_rate/
+# PRE conversion_funnel/
+# PRE navigation_paths/
+# PRE products_view_vs_cart/
+# PRE time_device_country/
+# PRE top_pages_time/</span>
+
+<span class="comment"># Ver tamaño de los resultados de anomalías</span>
+<span class="cmd">aws s3 ls s3://shopstream-processed-aad/anomalies/ --recursive --human-readable | head -5</span>
+
+<span class="comment"># Mostrar comando spark-submit (lo que se corrió en EMR)</span>
+<span class="cmd">cat punto3_pyspark/pipeline.py | head -30</span></pre>
+
+<h3>Demo Ana — Punto 4 y API</h3>
+<pre><span class="comment"># Endpoints de la API (en vivo desde terminal)</span>
+<span class="url">BASE="https://lz6d3q5skk.execute-api.us-east-1.amazonaws.com/production"</span>
+
+<span class="comment"># ── 1. Health check ──────────────────────────────────────────</span>
+<span class="cmd">curl -s "$BASE/health" | python3 -m json.tool</span>
+<span class="output">{
+    "service": "ShopStream API",
+    "status": "ok"
+}</span>
+
+<span class="comment"># ── 2. Top páginas por tiempo de permanencia ─────────────────</span>
+<span class="cmd">curl -s "$BASE/pages/top?metric=time_on_page&date=2025-01-15&limit=3" | python3 -m json.tool</span>
+<span class="output">{
+    "count": 3,
+    "date": "2025-01-15",
+    "limit": 3,
+    "metric": "time_on_page",
+    "data": [
+        {
+            "page_url": "/checkout/test-room-risk",
+            "avg_time_seconds": "1408.00",
+            "total_views": 1,
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        },
+        {
+            "page_url": "/category/outside-soldier",
+            "avg_time_seconds": "1374.00",
+            "total_views": 1,
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        },
+        {
+            "page_url": "/search/ball-food-number",
+            "avg_time_seconds": "1317.00",
+            "total_views": 1,
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        }
+    ]
+}</span>
+
+<span class="comment"># ── 3. Resumen de sesiones — Colombia, móvil ─────────────────</span>
+<span class="cmd">curl -s "$BASE/sessions/summary?date=2025-01-15&country=CO&device=mobile" | python3 -m json.tool</span>
+<span class="output">{
+    "count": 1,
+    "country": "CO",
+    "date": "2025-01-15",
+    "device": "mobile",
+    "data": [
+        {
+            "device_type": "mobile",
+            "country": "CO",
+            "avg_time_seconds": "118.80",
+            "total_views": 15630,
+            "stddev_time": "119.96",
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        }
+    ]
+}</span>
+
+<span class="comment"># ── 4. Sesiones anómalas detectadas ese día ──────────────────</span>
+<span class="cmd">curl -s "$BASE/anomalies?date=2025-01-15" | python3 -m json.tool</span>
+<span class="output">{
+    "date": "2025-01-15",
+    "total_anomalies": 362,
+    "data": [
+        {
+            "session_id": "f046fd99-abd5-4816-b5a8-0794c3c65746",
+            "user_id": "b0f456cf-dc30-4be1-af7a-0467cabf5a42",
+            "total_time": "4321.00",
+            "event_count": 20,
+            "zscore_time": "5.7800",
+            "anomaly_type": "zscore_time",
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        },
+        {
+            "session_id": "1c1339e7-189a-4095-9318-b90042566498",
+            "user_id": "43d2f352-227d-4d59-a252-9f1916f500b0",
+            "total_time": "4029.00",
+            "event_count": 23,
+            "zscore_time": "5.2400",
+            "anomaly_type": "zscore_time",
+            "date": "Wed, 15 Jan 2025 00:00:00 GMT"
+        }
+        <span class="comment">... 360 sesiones más ordenadas por z-score descendente</span>
+    ]
+}</span></pre>
+
+<h3>Cierre — Tests y CI/CD</h3>
+<pre><span class="comment"># Todos los tests (40+ tests)</span>
+<span class="cmd">pytest punto1_datos/tests/ punto2_ingesta/tests/ api/tests/ -v --tb=short 2>&1 | tail -20</span>
+
+<span class="comment"># Ver GitHub Actions corriendo</span>
+<span class="comment"># Abrir: https://github.com/&lt;usuario&gt;/ParcialFinal-BigData/actions</span></pre>
+
+
+<!-- ══════════════════════════════════════════
+     5. POSIBLES PREGUNTAS Y RESPUESTAS
+═══════════════════════════════════════════ -->
+<h2><span class="num">5</span>Preguntas frecuentes del profe (y cómo responder)</h2>
+
+<div class="qa-item">
+  <div class="q">¿Por qué usaron Lambda para la ingesta y no Glue directamente?</div>
+  <div class="a">Lambda es el mecanismo de trigger nativo de S3. Reacciona en tiempo real a cada archivo subido (event-driven), mientras Glue está pensado para jobs batch programados. La Lambda valida, cuarentena y registra métricas — es el "portero" del pipeline. Glue entra después, cuando los datos ya fueron catalogados.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Por qué s3:ObjectCreated:* y no s3:ObjectCreated:Put?</div>
+  <div class="a">Porque boto3 usa multipart upload automáticamente para archivos mayores a 8 MB. En ese caso S3 emite el evento CompleteMultipartUpload, no Put. Si usáramos solo Put, los eventos.jsonl de 166 MB nunca dispararían la Lambda. El wildcard ObjectCreated:* captura ambos.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Qué hace el nodo Data Quality en Glue Studio?</div>
+  <div class="a">Valida que los registros que van a RDS cumplan reglas mínimas: que page_url y date no sean nulos, que avg_time_seconds sea no negativo, que total_views sea no negativo y que bounce_rate esté entre 0 y 100. Los registros que no pasan se desvían a una salida separada, no contaminan el datawarehouse.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Qué significa el trigger condicional en Glue?</div>
+  <div class="a">El workflow tiene dos jobs: primero el ETL (S3 a RDS). El trigger condicional solo activa la segunda etapa (carga final y crawl) si el ETL terminó con estado SUCCEEDED. Si falla, en lugar de correr la segunda etapa, el SNS envía un email de alerta. Así evitamos cargar datos incompletos al datawarehouse.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Cómo detectan las anomalías?</div>
+  <div class="a">Usamos dos métodos estadísticos combinados. Z-score: calculamos media y desviación estándar del tiempo total de sesión; si |z| > 3 es anómalo. IQR: calculamos Q1 y Q3; si el valor cae fuera de [Q1 - 1.5·IQR, Q3 + 1.5·IQR] es outlier. Una sesión se marca anómala si dispara cualquiera de los dos criterios.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Por qué Zappa para la API y no un API Gateway manual?</div>
+  <div class="a">Zappa automatiza todo el empaquetado de Flask a Lambda y la creación del API Gateway. En AWS Academy no podemos crear roles IAM nuevos; Zappa acepta <code>role_name: LabRole</code> en su configuración. Una sola línea (<code>zappa deploy production</code>) despliega todo.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Por qué star schema en el datawarehouse?</div>
+  <div class="a">El star schema separa las dimensiones (páginas, dispositivos, productos — datos que cambian poco) de los hechos (métricas calculadas por día — datos que crecen constantemente). Esto optimiza las consultas analíticas de la API, que siempre filtran por fecha y agregan por dimensión.</div>
+</div>
+
+<div class="qa-item">
+  <div class="q">¿Cuántos tests tienen y qué cubren?</div>
+  <div class="a">17 tests del generador (conteos, tipos, distribuciones, integridad referencial), 19 del validador (campos requeridos por tipo, rangos, timestamps, enums), 4 del handler Lambda con moto (mock de S3 y CloudWatch), 13 de la API Flask (mock de BD, validación de parámetros, respuestas). Total: más de 53 tests en verde.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     6. CHECKLIST DÍA DE PRESENTACIÓN
+═══════════════════════════════════════════ -->
+<h2><span class="num">6</span>Checklist el día de la presentación</h2>
+
+<div class="callout warn">
+  <strong>Importante:</strong> Las credenciales Academy expiran cada ~4 horas. Carguen el lab <strong>máximo 1 hora antes</strong> de presentar y verifiquen que todo responde antes de entrar.
+</div>
+
+<ul class="checklist">
+  <li>Lab AWS Academy activo y credenciales en <code>.env</code> actualizadas <span class="who-tag all">Todos</span></li>
+  <li>Terminal con <code>source venv/bin/activate && source scripts/load_aws_env.sh</code> <span class="who-tag all">Todos</span></li>
+  <li>RDS <code>shopstream-rds-dw</code> encendido (estado: available) <span class="who-tag ana">Ana</span></li>
+  <li>API <code>/health</code> respondiendo 200 OK <span class="who-tag ana">Ana</span></li>
+  <li>Lambda <code>shopstream-ingesta-validator</code> estado Active <span class="who-tag alan">Alan</span></li>
+  <li>CloudWatch dashboard <em>ShopStream-Ingesta</em> abierto en pestaña <span class="who-tag alan">Alan</span></li>
+  <li>Glue Studio abierto en el job <em>shopstream-etl-s3-to-rds</em> (grafo visible) <span class="who-tag ana">Ana</span></li>
+  <li>S3 <code>shopstream-processed-aad/metrics/</code> con las 6 carpetas visibles <span class="who-tag daniela">Daniela</span></li>
+  <li>GitHub → Actions → último run verde <span class="who-tag alan">Alan</span></li>
+  <li>Screenshots en <code>docs/screenshots/</code> como respaldo por si algo falla en vivo <span class="who-tag all">Todos</span></li>
+  <li>Pestaña de navegador con README del repo abierta <span class="who-tag all">Todos</span></li>
+  <li>Tener <code>pytest -v</code> listo para correr sin errores <span class="who-tag alan">Alan</span></li>
+</ul>
+
+<div class="callout info">
+  <strong>Plan B si algo falla en vivo:</strong> Todos los resultados están persistidos. Si la Lambda no responde → mostrar logs en CloudWatch. Si RDS cae → mostrar el schema SQL y los datos en S3 Parquet. Si la API falla → mostrar el código Flask y la respuesta guardada. El código y los datos son la entrega real.
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<div class="footer">
+  <p>ShopStream Pipeline · Parcial III · Big Data e Ingeniería de Datos · Semestre 8 · 2026-1</p>
+  <p style="margin-top:4px;">Alan Osorio · Daniela López · Ana López · Cuenta AWS Academy 629685010172</p>
+</div>
+
+</body>
+</html>

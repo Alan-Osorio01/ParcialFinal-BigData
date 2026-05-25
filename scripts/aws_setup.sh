@@ -1,61 +1,28 @@
 #!/bin/bash
 # ============================================================
-# AWS Academy — Helper para configurar credenciales
+#  ATENCION: Este script fue REEMPLAZADO.
 # ============================================================
-# Uso:
-#   1. Inicia el lab en AWS Academy
-#   2. Click en "AWS Details" → muestra las credenciales de la sesión
-#   3. Copia el bloque [default] que aparece
-#   4. Ejecuta este script y pega las credenciales cuando lo pida
+# El método anterior escribía en ~/.aws/credentials y pisaba
+# las credenciales del trabajo. Ahora usamos .env aislado.
 #
-# Las credenciales de Academy expiran cuando termina la sesión (~4h).
-# Volver a correr este script cuando expiren.
+# Pasos nuevos:
+#   1. cp .env.example .env
+#   2. Edita .env y pega las credenciales actuales de AWS Academy
+#   3. En CADA terminal donde vayas a usar AWS, corre:
+#        source scripts/load_aws_env.sh
+#
+# Tus credenciales del trabajo en ~/.aws/credentials NO se tocan.
 # ============================================================
 
-set -e
-
-AWS_DIR="$HOME/.aws"
-mkdir -p "$AWS_DIR"
-
 echo ""
-echo "============================================"
-echo " AWS Academy — Setup de Credenciales"
-echo "============================================"
+echo "  Este script ya NO se usa."
 echo ""
-echo "En la consola Academy, click 'AWS Details' y copia el bloque:"
+echo "   Usa en su lugar:"
 echo ""
-echo "  [default]"
-echo "  aws_access_key_id=ASIA..."
-echo "  aws_secret_access_key=..."
-echo "  aws_session_token=..."
+echo "      1) cp .env.example .env       # solo la primera vez"
+echo "      2) nano .env                  # pega tus credenciales Academy"
+echo "      3) source scripts/load_aws_env.sh"
 echo ""
-echo "Pega el contenido completo (luego presiona Ctrl+D para terminar):"
+echo "    Tus credenciales del trabajo (~/.aws/credentials) NO se tocan."
 echo ""
-
-cat > "$AWS_DIR/credentials"
-
-# Configurar región por defecto
-cat > "$AWS_DIR/config" <<EOF
-[default]
-region = us-east-1
-output = json
-EOF
-
-echo ""
-echo "Credenciales guardadas en $AWS_DIR/credentials"
-echo "Region por defecto: us-east-1"
-echo ""
-
-# Verificar
-echo "Verificando acceso a AWS..."
-if aws sts get-caller-identity > /dev/null 2>&1; then
-    IDENTITY=$(aws sts get-caller-identity --output json)
-    echo " Acceso OK"
-    echo "$IDENTITY"
-else
-    echo " Error de acceso. Verifica que pegaste bien las credenciales."
-    exit 1
-fi
-
-echo ""
-echo "Listo. Ya puedes correr los scripts de infra/"
+exit 1

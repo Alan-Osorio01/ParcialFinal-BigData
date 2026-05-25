@@ -13,11 +13,24 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-# Script generated for node Source_S3_top_pages
-Source_S3_top_pages_node1779420938867 = glueContext.create_dynamic_frame.from_catalog(database="shopstream_glue_db", table_name="top_pages_time", transformation_ctx="Source_S3_top_pages_node1779420938867")
+JDBC_URL = "jdbc:postgresql://shopstream-rds-dw.cavmfs9savk3.us-east-1.rds.amazonaws.com:5432/postgres"
+JDBC_OPTS = {
+    "url": JDBC_URL,
+    "user": "Admin_postgres",
+    "password": "parcialfinal3",
+    "driver": "org.postgresql.Driver",
+}
 
-# Script generated for node Evaluate Data Quality
-EvaluateDataQuality_node1779421053878_ruleset = """
+# ══════════════════════════════════════════════════════════════════
+# BLOQUE 1 — top_pages_time → shopstream.fact_page_metrics
+# ══════════════════════════════════════════════════════════════════
+source_pages = glueContext.create_dynamic_frame.from_catalog(
+    database="shopstream_glue_db",
+    table_name="top_pages_time",
+    transformation_ctx="source_pages",
+)
+
+dq_ruleset = """
     Rules = [
         IsComplete "page_url",
         IsComplete "date",
@@ -26,29 +39,96 @@ EvaluateDataQuality_node1779421053878_ruleset = """
         ColumnValues "bounce_rate" between 0 and 100
     ]
 """
+dq_result = EvaluateDataQuality().process_rows(
+    frame=source_pages,
+    ruleset=dq_ruleset,
+    publishing_options={
+        "dataQualityEvaluationContext": "dq_pages",
+        "enableDataQualityCloudWatchMetrics": True,
+        "enableDataQualityResultsPublishing": True,
+    },
+    additional_options={"performanceTuning.caching": "CACHE_NOTHING"},
+)
 
-EvaluateDataQuality_node1779421053878 = EvaluateDataQuality().process_rows(frame=Source_S3_top_pages_node1779420938867, ruleset=EvaluateDataQuality_node1779421053878_ruleset, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1779421053878", "enableDataQualityCloudWatchMetrics": True, "enableDataQualityResultsPublishing": True}, additional_options={"performanceTuning.caching":"CACHE_NOTHING"})
+pages_clean = SelectFromCollection.apply(
+    dfc=dq_result, key="originalData", transformation_ctx="pages_clean"
+)
 
-# Script generated for node originalData
-originalData_node1779421150103 = SelectFromCollection.apply(dfc=EvaluateDataQuality_node1779421053878, key="originalData", transformation_ctx="originalData_node1779421150103")
-
-# Script generated for node Change Schema
-ChangeSchema_node1779421256539 = ApplyMapping.apply(frame=originalData_node1779421150103, mappings=[("page_url", "string", "page_url", "string"), ("date", "date", "date", "date"), ("avg_time_seconds", "double", "avg_time_seconds", "decimal"), ("total_views", "long", "total_views", "long")], transformation_ctx="ChangeSchema_node1779421256539")
-
-# Escribir a RDS PostgreSQL
-connection_options = {
-    "url": "jdbc:postgresql://shopstream-rds-dw.cavmfs9savk3.us-east-1.rds.amazonaws.com:5432/postgres",
-    "dbtable": "shopstream.fact_page_metrics",
-    "user": "Admin_postgres",
-    "password": "parcialfinal3",
-    "driver": "org.postgresql.Driver"
-}
+pages_mapped = ApplyMapping.apply(
+    frame=pages_clean,
+    mappings=[
+        ("page_url",         "string", "page_url",         "string"),
+        ("date",             "date",   "date",             "date"),
+        ("avg_time_seconds", "double", "avg_time_seconds", "decimal"),
+        ("total_views",      "long",   "total_views",      "long"),
+    ],
+    transformation_ctx="pages_mapped",
+)
 
 glueContext.write_dynamic_frame.from_options(
-    frame=ChangeSchema_node1779421256539,
+    frame=pages_mapped,
     connection_type="jdbc",
-    connection_options=connection_options,
-    transformation_ctx="write_to_rds"
+    connection_options={**JDBC_OPTS, "dbtable": "shopstream.fact_page_metrics"},
+    transformation_ctx="write_page_metrics",
+)
+
+# ══════════════════════════════════════════════════════════════════
+# BLOQUE 2 — time_device_country → shopstream.fact_session_summary
+# ══════════════════════════════════════════════════════════════════
+source_sessions = glueContext.create_dynamic_frame.from_catalog(
+    database="shopstream_glue_db",
+    table_name="time_device_country",
+    transformation_ctx="source_sessions",
+)
+
+sessions_mapped = ApplyMapping.apply(
+    frame=source_sessions,
+    mappings=[
+        ("device_type",      "string", "device_type",      "string"),
+        ("country",          "string", "country",          "string"),
+        ("date",             "date",   "date",             "date"),
+        ("avg_time_seconds", "double", "avg_time_seconds", "decimal"),
+        ("total_views",      "bigint", "total_views",      "long"),
+        ("stddev_time",      "double", "stddev_time",      "decimal"),
+    ],
+    transformation_ctx="sessions_mapped",
+)
+
+glueContext.write_dynamic_frame.from_options(
+    frame=sessions_mapped,
+    connection_type="jdbc",
+    connection_options={**JDBC_OPTS, "dbtable": "shopstream.fact_session_summary"},
+    transformation_ctx="write_session_summary",
+)
+
+# ══════════════════════════════════════════════════════════════════
+# BLOQUE 3 — anomalies → shopstream.fact_anomalies
+# ══════════════════════════════════════════════════════════════════
+source_anomalies = glueContext.create_dynamic_frame.from_catalog(
+    database="shopstream_glue_db",
+    table_name="anomalies",
+    transformation_ctx="source_anomalies",
+)
+
+anomalies_mapped = ApplyMapping.apply(
+    frame=source_anomalies,
+    mappings=[
+        ("session_id",        "string", "session_id",  "string"),
+        ("user_id",           "string", "user_id",     "string"),
+        ("date",              "date",   "date",         "date"),
+        ("total_time",        "bigint", "total_time",   "decimal"),
+        ("event_count",       "bigint", "event_count",  "long"),
+        ("zscore_total_time", "double", "zscore_time",  "decimal"),
+        ("anomaly_type",      "string", "anomaly_type", "string"),
+    ],
+    transformation_ctx="anomalies_mapped",
+)
+
+glueContext.write_dynamic_frame.from_options(
+    frame=anomalies_mapped,
+    connection_type="jdbc",
+    connection_options={**JDBC_OPTS, "dbtable": "shopstream.fact_anomalies"},
+    transformation_ctx="write_anomalies",
 )
 
 job.commit()

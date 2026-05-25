@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ShopStream — Guía Conceptual · Qué hace cada pieza</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0f172a;
+    --blue:   #1e40af;
+    --indigo: #3730a3;
+    --teal:   #0d9488;
+    --green:  #059669;
+    --amber:  #d97706;
+    --slate:  #475569;
+    --light:  #f8fafc;
+    --border: #e2e8f0;
+    --radius: 8px;
+  }
+
+  html { font-size: 15px; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1e293b;
+    line-height: 1.7;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+    background: #fff;
+  }
+
+  /* ─ PORTADA ─ */
+  .cover {
+    text-align: center;
+    padding: 50px 0 44px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 50px;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+  .cover h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .cover h1 span { color: var(--teal); }
+  .cover .subtitle {
+    font-size: 1rem;
+    color: var(--slate);
+    margin-bottom: 6px;
+  }
+  .cover .hint {
+    margin-top: 20px;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  /* ─ INTRO ─ */
+  .intro {
+    background: var(--light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 22px 28px;
+    margin-bottom: 40px;
+  }
+  .intro h3 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .intro p {
+    color: #334155;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+  .intro p:last-child { margin-bottom: 0; }
+
+  /* ─ SECCIONES ─ */
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 50px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: -0.02em;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  /* ─ CARDS DE PIEZA ─ */
+  .piece {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .piece-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .piece-icon {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--navy);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  .piece-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    flex: 1;
+  }
+  .piece-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--slate);
+    background: var(--light);
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .piece-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .piece-row:last-child { margin-bottom: 0; }
+  .piece-label {
+    flex-shrink: 0;
+    width: 130px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--slate);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .piece-text {
+    flex: 1;
+    color: #334155;
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  /* ─ MEMORABLE ─ */
+  .memorable {
+    background: #fffbeb;
+    border-left: 3px solid var(--amber);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin-top: 12px;
+    font-size: 0.88rem;
+    color: #78350f;
+    font-style: italic;
+  }
+  .memorable::before {
+    content: "💭 ";
+    margin-right: 4px;
+    font-style: normal;
+  }
+
+  /* ─ FLUJO ─ */
+  .flow {
+    background: #f1f5f9;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 16px 0 28px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .flow-step:last-child { margin-bottom: 0; }
+  .flow-arrow {
+    color: var(--teal);
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+    padding-top: 1px;
+  }
+  .flow-text {
+    flex: 1;
+    color: #334155;
+    font-size: 0.92rem;
+  }
+  .flow-text strong { color: var(--navy); }
+
+  /* ─ TALKING POINTS ─ */
+  .pitch {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 14px;
+    background: var(--light);
+  }
+  .pitch-who {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .pitch-who.alan    { color: var(--blue); }
+  .pitch-who.daniela { color: var(--teal); }
+  .pitch-who.ana     { color: var(--indigo); }
+  .pitch-line {
+    font-size: 0.95rem;
+    color: #334155;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+  .pitch-line::before {
+    content: "“";
+    color: #94a3b8;
+    font-size: 1.4rem;
+    margin-right: 4px;
+    vertical-align: -4px;
+  }
+  .pitch-line::after {
+    content: "”";
+    color: #94a3b8;
+    font-size: 1.4rem;
+    margin-left: 4px;
+    vertical-align: -4px;
+  }
+
+  /* ─ ANALOGÍA ─ */
+  .analogia {
+    background: #ecfdf5;
+    border-left: 4px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 18px 24px;
+    margin: 20px 0;
+  }
+  .analogia .label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .analogia p {
+    font-size: 0.95rem;
+    color: #064e3b;
+    line-height: 1.6;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--navy);
+  }
+
+  .footer {
+    margin-top: 64px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.78rem;
+    color: #94a3b8;
+  }
+
+  @media print {
+    body { max-width: 100%; padding: 20px 30px; font-size: 13px; }
+    h2 { page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+    .piece, .pitch, .flow, .analogia, .intro { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<div class="cover">
+  <div class="badge">Guía conceptual · Para entender antes de la demo</div>
+  <h1>Qué hace <span>cada pieza</span></h1>
+  <p class="subtitle">ShopStream Pipeline · Parcial III · 2026-1</p>
+  <p class="hint">Lean esto primero, después la guía técnica. Aquí entienden el "por qué" — allá ven el "cómo".</p>
+</div>
+
+
+<!-- ══ INTRO: PROBLEMA DE NEGOCIO ══ -->
+<div class="intro">
+  <h3>El problema en una frase</h3>
+  <p>ShopStream es una tienda online ficticia que <strong>no entiende cómo se comportan sus usuarios</strong>: qué páginas miran, dónde abandonan el carrito, qué productos llaman la atención pero nadie compra.</p>
+  <p>Cada noche, el servidor web suelta en S3 un archivo de log con todos los eventos del día (≥ 500.000 por día). <strong>Nuestro pipeline lo procesa, lo limpia, calcula métricas de negocio y lo expone como una API consultable.</strong></p>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     1. EL PIPELINE COMPLETO EN 7 PASOS
+═══════════════════════════════════════════ -->
+<h2><span class="num">1</span>El pipeline completo, paso a paso</h2>
+
+<div class="flow">
+  <div class="flow-step">
+    <div class="flow-arrow">①</div>
+    <div class="flow-text"><strong>Generamos</strong> 500.000 eventos sintéticos del día con distribuciones realistas (precios lognormales, tiempos exponenciales).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">②</div>
+    <div class="flow-text"><strong>Subimos</strong> los archivos a S3 organizados por <code>año/mes/día</code>.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">③</div>
+    <div class="flow-text">Una <strong>Lambda detecta</strong> cada archivo nuevo, valida cada evento, y manda a cuarentena los inválidos.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">④</div>
+    <div class="flow-text">Un <strong>cluster EMR con PySpark</strong> calcula las 6 métricas de negocio y detecta sesiones anómalas.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">⑤</div>
+    <div class="flow-text">Los resultados salen en <strong>Parquet</strong> a otro bucket S3 (formato comprimido y rápido de leer).</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">⑥</div>
+    <div class="flow-text">Un <strong>Glue Workflow</strong> (todos los días a las 2 AM UTC) toma esos Parquets, los valida con reglas de calidad, y los carga al datawarehouse PostgreSQL.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-arrow">⑦</div>
+    <div class="flow-text">Una <strong>API REST</strong> en Lambda + API Gateway expone los datos al equipo de producto vía 3 endpoints HTTP.</div>
+  </div>
+</div>
+
+<div class="analogia">
+  <div class="label">Analogía simple</div>
+  <p><strong>Es como una cocina industrial:</strong> el generador es el camión que trae los ingredientes crudos, la Lambda es el inspector sanitario que revisa qué entra, EMR es la cocina que prepara los platos, Glue es el mesero que los lleva a la nevera (RDS) ordenados, y la API es la ventanilla por donde el cliente pide su porción.</p>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     2. CADA PIEZA EXPLICADA
+═══════════════════════════════════════════ -->
+<h2><span class="num">2</span>Cada pieza: qué hace y por qué</h2>
+
+
+<!-- ── GENERATOR ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 1</span>
+    <span class="piece-name">Generador de datos (<code>generator.py</code>)</span>
+    <span class="piece-tag">Alan · Punto 1</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Crea 500.000 eventos falsos pero realistas de un día (page_view, click, search, product_view, cart_event) + usuarios + productos + sesiones + transacciones.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">No tenemos un servidor web real con tráfico, así que simulamos el log nocturno. Es la "fuente" del pipeline.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué así</div>
+    <div class="piece-text">Usamos distribuciones estadísticas reales (lognormal para precios, exponencial para tiempos) para que las métricas tengan sentido.</div>
+  </div>
+  <div class="memorable">Recuerden: "500k registros con distribuciones realistas, no random simple".</div>
+</div>
+
+
+<!-- ── S3 RAW ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 2</span>
+    <span class="piece-name">S3 bucket "raw" (<code>shopstream-raw-aad</code>)</span>
+    <span class="piece-tag">Alan · Punto 1</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Guarda los archivos sin procesar, particionados por fecha: <code>year=2025/month=01/day=15/</code>.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Es el "data lake" — almacena la verdad cruda original por si hay que reprocesar.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué así</div>
+    <div class="piece-text">La partición por fecha hace que consultas como "dame todo lo del 15 de enero" sean instantáneas — no escanea todo el bucket.</div>
+  </div>
+  <div class="memorable">Particionar = filtrar por carpeta en vez de leer todo. Más rápido y más barato.</div>
+</div>
+
+
+<!-- ── LAMBDA INGESTA ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 3</span>
+    <span class="piece-name">Lambda de validación (<code>shopstream-ingesta-validator</code>)</span>
+    <span class="piece-tag">Alan · Punto 2</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Se activa sola cada vez que llega un archivo a S3. Revisa que cada evento tenga los campos correctos, tipos válidos y rangos coherentes.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Evita que datos basura contaminen el pipeline. Si un evento es inválido, lo manda a un bucket <code>quarantine</code> con un metadata.json explicando el error.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué Lambda</div>
+    <div class="piece-text">Es event-driven: reacciona en segundos al subir un archivo. No hay que tener un servidor encendido esperando.</div>
+  </div>
+  <div class="memorable">"La Lambda es el portero del pipeline — solo deja pasar datos limpios".</div>
+</div>
+
+
+<!-- ── CLOUDWATCH ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 4</span>
+    <span class="piece-name">CloudWatch + SNS (dashboard + alarmas)</span>
+    <span class="piece-tag">Alan · Punto 2</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Cada vez que la Lambda procesa un archivo, registra métricas (archivos recibidos, registros válidos/inválidos, tamaños). Una alarma envía un email si hay errores.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Para saber sin entrar a AWS si el pipeline está funcionando. Si algo falla a las 3 AM, llega un correo automático.</div>
+  </div>
+  <div class="memorable">Observabilidad: "no se trata solo de que funcione, sino de saber cuándo no funciona".</div>
+</div>
+
+
+<!-- ── EMR + PYSPARK ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 5</span>
+    <span class="piece-name">EMR + PySpark Pipeline (<code>pipeline.py</code>)</span>
+    <span class="piece-tag">Daniela · Punto 3</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Levanta un cluster de máquinas (1 master + 2 workers) y procesa los 500k eventos en paralelo. Limpia (dedup, nulos, normalización) y calcula <strong>6 métricas de negocio</strong> + detecta sesiones raras.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Métricas</div>
+    <div class="piece-text">① Top 20 páginas por tiempo · ② Tasa de rebote por tipo · ③ Embudo de conversión · ④ Productos vistos vs carrito · ⑤ Rutas de navegación · ⑥ Tiempo por dispositivo y país.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Anomalías</div>
+    <div class="piece-text">Marca sesiones extrañas usando dos métodos estadísticos: <strong>z-score</strong> (qué tan lejos del promedio está) e <strong>IQR</strong> (fuera del rango "normal" entre Q1 y Q3).</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué Spark</div>
+    <div class="piece-text">Hacer estos cálculos en Python normal con 500.000 filas tomaría horas. Spark los hace en paralelo en minutos.</div>
+  </div>
+  <div class="memorable">PySpark divide el trabajo entre varias máquinas. Es como tener 3 personas lavando platos en vez de 1.</div>
+</div>
+
+
+<!-- ── S3 PROCESSED + PARQUET ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 6</span>
+    <span class="piece-name">S3 "processed" + Parquet (<code>shopstream-processed-aad</code>)</span>
+    <span class="piece-tag">Daniela · Punto 3</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Guarda los resultados de Spark en formato Parquet (columnar, comprimido con Snappy), también particionado por fecha.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Parquet es 10× más rápido de leer que JSON y pesa la mitad. Glue y otros sistemas lo entienden nativamente.</div>
+  </div>
+  <div class="memorable">JSON es para humanos, Parquet es para máquinas. Lo procesado va en Parquet.</div>
+</div>
+
+
+<!-- ── GLUE STUDIO ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 7</span>
+    <span class="piece-name">Glue Studio Job + Workflow</span>
+    <span class="piece-tag">Ana · Punto 4</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Un job ETL visual (grafo de nodos) lee los Parquets, los valida con un nodo de Data Quality, los transforma y los inserta en RDS.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Mueve los datos del data lake (S3) al datawarehouse (RDS) donde la API los puede consultar rápido.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Workflow</div>
+    <div class="piece-text">Se ejecuta solo todos los días a las 2 AM UTC (trigger programado). Si el ETL falla, no carga datos malos y avisa por email (trigger condicional + SNS).</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué visual</div>
+    <div class="piece-text">El parcial lo pide explícito. Además, el grafo se entiende sin leer código — útil para personas no técnicas del equipo.</div>
+  </div>
+  <div class="memorable">Glue = puente automático S3 → RDS con calidad de datos integrada.</div>
+</div>
+
+
+<!-- ── RDS DW ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 8</span>
+    <span class="piece-name">RDS PostgreSQL — Datawarehouse</span>
+    <span class="piece-tag">Ana · Punto 4</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Base de datos donde viven las métricas ya calculadas. Tiene <strong>9 tablas en star schema</strong>: 3 dimensiones (páginas, dispositivos, productos) + 6 facts (métricas por día).</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">La API necesita responder rápido — Parquet sirve para procesar lotes grandes, pero para consultas tipo "dame el top 10 de hoy" es mejor una BD relacional con índices.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué star schema</div>
+    <div class="piece-text">Separa lo que cambia poco (dimensiones) de lo que crece cada día (facts). Es el patrón estándar para analítica.</div>
+  </div>
+  <div class="memorable">Star schema = dimensiones en el centro, hechos alrededor. Hecho para consultas analíticas, no para CRUD.</div>
+</div>
+
+
+<!-- ── API ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 9</span>
+    <span class="piece-name">API REST · Flask + Zappa + Lambda + API Gateway</span>
+    <span class="piece-tag">Ana · API</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">Expone los datos del RDS al mundo vía 3 endpoints HTTP:</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label" style="font-family:'Fira Code',monospace; text-transform:none; letter-spacing:0;">/pages/top</div>
+    <div class="piece-text">Las páginas con más tiempo de permanencia o más rebote en un día.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label" style="font-family:'Fira Code',monospace; text-transform:none; letter-spacing:0; font-size:0.7rem;">/sessions/summary</div>
+    <div class="piece-text">Resumen de sesiones filtrado por país y dispositivo.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label" style="font-family:'Fira Code',monospace; text-transform:none; letter-spacing:0;">/anomalies</div>
+    <div class="piece-text">Sesiones anómalas detectadas con su z-score y tipo de anomalía.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Por qué Zappa</div>
+    <div class="piece-text">Empaqueta el código Flask y lo despliega en Lambda + API Gateway con un solo comando. No hay que mantener servidor encendido.</div>
+  </div>
+  <div class="memorable">La API es la "cara" del pipeline. Es lo único que ve el equipo de producto.</div>
+</div>
+
+
+<!-- ── CI/CD ── -->
+<div class="piece">
+  <div class="piece-header">
+    <span class="piece-icon">PIEZA 10</span>
+    <span class="piece-name">GitHub Actions + Tests (<code>pytest</code>)</span>
+    <span class="piece-tag">Alan · transversal</span>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Qué hace</div>
+    <div class="piece-text">En cada push a GitHub, corre solo: lint (flake8) + más de 50 tests unitarios + verifica que la Lambda se empaqueta bien.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Para qué</div>
+    <div class="piece-text">Si alguien rompe algo, lo sabemos antes de que llegue a AWS. Garantiza que el código en el repo siempre funciona.</div>
+  </div>
+  <div class="memorable">CI/CD = un "vigilante" automático que revisa cada cambio antes de aceptarlo.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     3. SI EL PROFE PREGUNTA "EN UNA FRASE"
+═══════════════════════════════════════════ -->
+<h2><span class="num">3</span>Si el profe les pregunta "explíquenmelo en una frase"</h2>
+
+<p style="margin-bottom: 18px; color: var(--slate); font-style: italic;">Memoricen estas frases. Cada uno la suya. Son la respuesta a "qué hiciste tú".</p>
+
+<div class="pitch">
+  <div class="pitch-who alan">Alan — Punto 1 y 2</div>
+  <div class="pitch-line">Yo construí la fuente de datos y el portero del pipeline: genero 500 mil eventos sintéticos realistas por día, los subo a S3 particionados por fecha, y una Lambda los valida automáticamente apenas llegan — los inválidos van a cuarentena con metadata del error, y todo queda registrado en CloudWatch con alarma SNS.</div>
+</div>
+
+<div class="pitch">
+  <div class="pitch-who daniela">Daniela — Punto 3</div>
+  <div class="pitch-line">Yo me encargo del procesamiento pesado: levanto un cluster EMR con Spark y calculo en paralelo las 6 métricas de comportamiento que pide el parcial — desde el embudo de conversión hasta las rutas de navegación — y detecto sesiones anómalas con z-score e IQR. Todo se guarda en Parquet particionado para que Glue lo lea después.</div>
+</div>
+
+<div class="pitch">
+  <div class="pitch-who ana">Ana — Punto 4 + API</div>
+  <div class="pitch-line">Yo diseñé el datawarehouse en RDS con star schema, construí el ETL visual en Glue Studio (con un nodo de Data Quality y un workflow programado a las 2 AM con trigger condicional), y desplegué la API REST en Lambda + API Gateway usando Zappa — con tres endpoints que consultan las métricas calculadas por Daniela.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     4. PALABRAS CLAVE
+═══════════════════════════════════════════ -->
+<h2><span class="num">4</span>Palabras clave que deben sonar técnicas</h2>
+
+<p style="margin-bottom: 18px; color: var(--slate);">Si las usan al hablar, el profe va a notar que entienden de qué hablan.</p>
+
+<div class="piece">
+  <div class="piece-row">
+    <div class="piece-label">Event-driven</div>
+    <div class="piece-text">La Lambda no se ejecuta por horario — reacciona al evento "archivo subido". Es la diferencia con un cron.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Idempotente</div>
+    <div class="piece-text">Si corres dos veces el mismo job, el resultado es el mismo. Nuestros scripts de infra están diseñados así.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Multipart upload</div>
+    <div class="piece-text">boto3 sube archivos grandes en partes paralelas. Por eso el trigger debe ser <code>s3:ObjectCreated:*</code>, no solo <code>Put</code>.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Particionado</div>
+    <div class="piece-text">Carpetas <code>year=/month=/day=</code> que permiten "pushdown predicate": la consulta solo lee la carpeta del día que busca.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Star schema</div>
+    <div class="piece-text">Diseño de BD para analítica: dimensiones pequeñas en el centro, tablas de hechos (facts) que crecen alrededor.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Z-score / IQR</div>
+    <div class="piece-text">Métodos estadísticos para detectar valores fuera de lo normal. Z-score mide en desviaciones estándar; IQR mira los cuartiles.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Data Quality</div>
+    <div class="piece-text">Reglas declarativas que validan los datos antes de cargarlos a RDS (campos no nulos, rangos, formatos).</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">CI/CD</div>
+    <div class="piece-text">Integración Continua / Despliegue Continuo. Cada cambio se verifica solo antes de ir a producción.</div>
+  </div>
+  <div class="piece-row">
+    <div class="piece-label">Trigger condicional</div>
+    <div class="piece-text">Una etapa del workflow solo corre si la anterior tuvo estado <code>SUCCEEDED</code>. Si falla, salta a alertar en vez de seguir.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     5. EL CIERRE QUE QUEDA BIEN
+═══════════════════════════════════════════ -->
+<h2><span class="num">5</span>El cierre que queda bien en la presentación</h2>
+
+<div class="analogia">
+  <div class="label">Frase de cierre — quien hable de último la dice</div>
+  <p>"Hicimos un pipeline batch completo en AWS que toma logs crudos de comportamiento, los valida en tiempo real, los procesa en paralelo con Spark, los carga ordenados a un datawarehouse, y los expone como API REST — todo con tests automáticos, despliegue continuo y observabilidad integrada. La cuenta Academy es compartida y todo el código está en GitHub."</p>
+</div>
+
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <p>ShopStream Pipeline · Parcial III · Big Data e Ingeniería de Datos · Semestre 8 · 2026-1</p>
+  <p style="margin-top:4px;">Alan Osorio · Daniela López · Ana López</p>
+  <p style="margin-top:10px; font-style:italic;">Después de esta guía, abrir <code>GUIA_PRESENTACION.html</code> para los comandos exactos.</p>
+</div>
+
+</body>
+</html>

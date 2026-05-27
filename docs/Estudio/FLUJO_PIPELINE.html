@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopStream · Flujo del Pipeline</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2230;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #f0883e;
+    --purple: #d2a8ff;
+    --yellow: #e3b341;
+    --red: #f85149;
+    --teal: #39d353;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px 80px;
+  }
+  .page { max-width: 960px; margin: 0 auto; }
+
+  /* HEADER */
+  header { text-align: center; padding: 48px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+  header .badge {
+    display: inline-block;
+    background: rgba(63,185,80,.15);
+    border: 1px solid rgba(63,185,80,.4);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  header h1 { font-size: 36px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 10px; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); font-size: 15px; max-width: 600px; margin: 0 auto; }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* COMPLIANCE GRID */
+  .compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .compliance-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .compliance-card .card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .compliance-card ul { list-style: none; }
+  .compliance-card li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .compliance-card li::before { content: "✓"; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* PIPELINE FLOW */
+  .pipeline { margin-bottom: 56px; }
+  .step {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 48px;
+    bottom: -12px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    position: relative;
+    z-index: 1;
+  }
+  .step-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    flex: 1;
+    margin-bottom: 0;
+  }
+  .step-body h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .step-body p { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .step-body .detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+    letter-spacing: .04em;
+  }
+  .chip-blue  { background: rgba(88,166,255,.12); border: 1px solid rgba(88,166,255,.3); color: var(--accent); }
+  .chip-green { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.3);  color: var(--green); }
+  .chip-orange{ background: rgba(240,136,62,.12); border: 1px solid rgba(240,136,62,.3); color: var(--orange); }
+  .chip-purple{ background: rgba(210,168,255,.12);border: 1px solid rgba(210,168,255,.3);color: var(--purple); }
+  .chip-yellow{ background: rgba(227,179,65,.12); border: 1px solid rgba(227,179,65,.3); color: var(--yellow); }
+  .chip-teal  { background: rgba(57,211,83,.12);  border: 1px solid rgba(57,211,83,.3);  color: var(--teal); }
+
+  /* DATA FLOW DIAGRAM */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin-bottom: 56px;
+    overflow-x: auto;
+  }
+  .diagram-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    min-width: 640px;
+  }
+  .d-node {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .d-node .d-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
+  .d-node .d-name  { font-size: 13px; font-weight: 600; }
+  .d-arrow { color: var(--border); font-size: 22px; padding: 0 8px; flex-shrink: 0; }
+  .d-node.hl-blue   { border-color: rgba(88,166,255,.5);  background: rgba(88,166,255,.08); }
+  .d-node.hl-green  { border-color: rgba(63,185,80,.5);   background: rgba(63,185,80,.08); }
+  .d-node.hl-orange { border-color: rgba(240,136,62,.5);  background: rgba(240,136,62,.08); }
+  .d-node.hl-purple { border-color: rgba(210,168,255,.5); background: rgba(210,168,255,.08); }
+  .d-node.hl-teal   { border-color: rgba(57,211,83,.5);   background: rgba(57,211,83,.08); }
+  .d-node .d-name.blue   { color: var(--accent); }
+  .d-node .d-name.green  { color: var(--green); }
+  .d-node .d-name.orange { color: var(--orange); }
+  .d-node .d-name.purple { color: var(--purple); }
+  .d-node .d-name.teal   { color: var(--teal); }
+
+  /* OUTPUTS GRID */
+  .outputs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .output-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .output-card .oc-icon { font-size: 22px; margin-bottom: 10px; }
+  .output-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .output-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .output-card .stat {
+    margin-top: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.5px;
+  }
+  .output-card .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* TEAM */
+  .team-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .team-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    text-align: center;
+  }
+  .team-card .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+    margin: 0 auto 12px;
+  }
+  .team-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .team-card p  { font-size: 12px; color: var(--muted); }
+  .team-card ul { list-style: none; margin-top: 10px; }
+  .team-card li { font-size: 12px; color: var(--muted); padding: 2px 0; }
+
+  /* FINAL BANNER */
+  .banner {
+    background: linear-gradient(135deg, rgba(88,166,255,.08), rgba(63,185,80,.06));
+    border: 1px solid rgba(88,166,255,.25);
+    border-radius: 12px;
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .banner h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .banner p  { font-size: 14px; color: var(--muted); max-width: 560px; margin: 0 auto; }
+  .banner .all-good {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(63,185,80,.15);
+    border: 1px solid rgba(63,185,80,.4);
+    color: var(--green);
+    font-size: 13px; font-weight: 600;
+    padding: 8px 20px; border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .team-row { grid-template-columns: 1fr; }
+    header h1 { font-size: 26px; }
+    .diagram-flow { min-width: 500px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge">Parcial Final · Big Data · 2026-1</div>
+    <h1>ShopStream <span>Pipeline</span></h1>
+    <p>Arquitectura completa de datos en tiempo real sobre AWS Academy — desde eventos raw hasta API REST desplegada en producción.</p>
+  </header>
+
+  <!-- CUMPLIMIENTO -->
+  <div class="section-title">Cumplimiento del parcial</div>
+  <div class="compliance-grid">
+    <div class="compliance-card">
+      <div class="card-title">Punto 1 · Ingesta & Storage</div>
+      <ul>
+        <li>Bucket raw con prefijo <code>year/month/day/</code></li>
+        <li>Lambda trigger <code>s3:ObjectCreated:*</code></li>
+        <li>Procesamiento a Parquet + Snappy</li>
+        <li>Bucket processed con misma partición</li>
+        <li>7 tablas Glue Catalog registradas</li>
+      </ul>
+    </div>
+    <div class="compliance-card">
+      <div class="card-title">Punto 2 · EMR + PySpark</div>
+      <ul>
+        <li>Cluster EMR 6.15.0, 1 master + 2 core</li>
+        <li>6 métricas calculadas sobre 1 M+ eventos</li>
+        <li>Anomalías con z-score e IQR</li>
+        <li>Resultados Parquet en S3 processed</li>
+        <li>Script subido y documentado</li>
+      </ul>
+    </div>
+    <div class="compliance-card">
+      <div class="card-title">Punto 3 · Data Warehouse</div>
+      <ul>
+        <li>RDS PostgreSQL en VPC, esquema <code>shopstream</code></li>
+        <li>3 tablas de dimensión (dim_*)</li>
+        <li>6 tablas de hecho (fact_*)</li>
+        <li>Star schema implementado</li>
+        <li>Carga vía Glue ETL verificada</li>
+      </ul>
+    </div>
+    <div class="compliance-card">
+      <div class="card-title">Punto 4 · Glue ETL</div>
+      <ul>
+        <li>Visual ETL con nodo Data Quality</li>
+        <li>5 reglas de calidad en fact_page_metrics</li>
+        <li>3 bloques: páginas, sesiones, anomalías</li>
+        <li>Glue Workflow con trigger diario 2 AM</li>
+        <li>Trigger condicional en cascada</li>
+      </ul>
+    </div>
+    <div class="compliance-card">
+      <div class="card-title">Punto 5 · API REST</div>
+      <ul>
+        <li><code>GET /pages/top</code> — 20 páginas top</li>
+        <li><code>GET /sessions/summary</code> — por país/device</li>
+        <li><code>GET /anomalies</code> — 362 sesiones detectadas</li>
+        <li>Flask + Zappa en Lambda + API Gateway</li>
+        <li>13 tests unitarios, CI/CD con GitHub Actions</li>
+      </ul>
+    </div>
+    <div class="compliance-card">
+      <div class="card-title">Extras implementados</div>
+      <ul>
+        <li>README con URLs y documentación</li>
+        <li><code>.env</code> aislado, nunca en git</li>
+        <li>Guía conceptual del pipeline</li>
+        <li>Guía de presentación con Q&A</li>
+        <li>Datos reales verificados en cada endpoint</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FLUJO VISUAL -->
+  <div class="section-title">Flujo de datos — extremo a extremo</div>
+  <div class="diagram" style="margin-bottom:24px;">
+    <div class="diagram-flow">
+      <div class="d-node hl-blue">
+        <div class="d-label">Origen</div>
+        <div class="d-name blue">S3 Raw<br><small style="font-weight:400;font-size:11px;color:#8b949e">events.jsonl</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-orange">
+        <div class="d-label">Trigger</div>
+        <div class="d-name orange">Lambda<br><small style="font-weight:400;font-size:11px;color:#8b949e">JSON→Parquet</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-blue">
+        <div class="d-label">Procesado</div>
+        <div class="d-name blue">S3 Processed<br><small style="font-weight:400;font-size:11px;color:#8b949e">.parquet Snappy</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-purple">
+        <div class="d-label">Cómputo</div>
+        <div class="d-name purple">EMR PySpark<br><small style="font-weight:400;font-size:11px;color:#8b949e">6 métricas</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-orange">
+        <div class="d-label">ETL</div>
+        <div class="d-name orange">Glue Job<br><small style="font-weight:400;font-size:11px;color:#8b949e">S3→RDS</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-green">
+        <div class="d-label">Warehouse</div>
+        <div class="d-name green">RDS PostgreSQL<br><small style="font-weight:400;font-size:11px;color:#8b949e">star schema</small></div>
+      </div>
+      <div class="d-arrow">→</div>
+      <div class="d-node hl-teal">
+        <div class="d-label">Consumo</div>
+        <div class="d-name teal">Flask API<br><small style="font-weight:400;font-size:11px;color:#8b949e">Lambda+APIGW</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASOS DETALLADOS -->
+  <div class="pipeline">
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(88,166,255,.5);color:var(--accent);">1</div>
+      <div class="step-body">
+        <h3>Datos llegan a S3 (bucket raw)</h3>
+        <p>El archivo <code>events.jsonl</code> (~166 MB, 1 M+ eventos de comportamiento de usuarios) se sube al bucket con prefijo <code>year=2024/month=03/day=15/</code>. Cada línea es un evento: page view, click, scroll, purchase.</p>
+        <div class="detail">
+          <span class="chip chip-blue">S3 · shopstream-raw-data-…</span>
+          <span class="chip chip-green">Partición hive-style</span>
+          <span class="chip chip-orange">1 M+ eventos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(240,136,62,.5);color:var(--orange);">2</div>
+      <div class="step-body">
+        <h3>Lambda convierte JSON → Parquet</h3>
+        <p>El evento <code>s3:ObjectCreated:*</code> activa automáticamente la función Lambda. Convierte el archivo JSON a Parquet con compresión Snappy y lo escribe en el bucket processed. El trigger <code>:*</code> captura también uploads multiparte (archivos &gt;8 MB).</p>
+        <div class="detail">
+          <span class="chip chip-orange">Lambda · shopstream-raw-to-parquet</span>
+          <span class="chip chip-blue">Parquet + Snappy</span>
+          <span class="chip chip-green">S3 processed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(210,168,255,.5);color:var(--purple);">3</div>
+      <div class="step-body">
+        <h3>EMR calcula 6 métricas con PySpark</h3>
+        <p>Un cluster EMR (1 master + 2 workers) lee los Parquet y genera 6 DataFrames de análisis: tiempo por página, sesiones por dispositivo+país, top páginas, comparativas de bounce rate, patrones temporales y anomalías con z-score.</p>
+        <div class="detail">
+          <span class="chip chip-purple">EMR 6.15.0 · PySpark</span>
+          <span class="chip chip-yellow">6 métricas</span>
+          <span class="chip chip-orange">Z-score + IQR anomalías</span>
+          <span class="chip chip-blue">→ S3 processed/aggregated/</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(227,179,65,.5);color:var(--yellow);">4</div>
+      <div class="step-body">
+        <h3>Glue Catalog indexa los archivos</h3>
+        <p>AWS Glue Crawler descubre los archivos Parquet en S3 y registra 7 tablas en el catálogo <code>shopstream_glue_db</code>. A partir de aquí cualquier servicio AWS puede consultar los datos con SQL sin moverlos.</p>
+        <div class="detail">
+          <span class="chip chip-yellow">Glue Catalog · shopstream_glue_db</span>
+          <span class="chip chip-blue">7 tablas registradas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(240,136,62,.5);color:var(--orange);">5</div>
+      <div class="step-body">
+        <h3>Glue ETL carga el Data Warehouse</h3>
+        <p>El Glue Job Visual ETL lee del catálogo, aplica un nodo de <em>Data Quality</em> con 5 reglas (completeness, rango de valores), hace ApplyMapping para renombrar columnas y escribe vía JDBC en PostgreSQL. Se ejecuta diario a las 2 AM UTC mediante un Glue Workflow.</p>
+        <div class="detail">
+          <span class="chip chip-orange">Glue Visual ETL</span>
+          <span class="chip chip-green">Data Quality · 5 reglas</span>
+          <span class="chip chip-blue">3 tablas de hecho cargadas</span>
+          <span class="chip chip-yellow">Cron: 0 2 * * ?</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(63,185,80,.5);color:var(--green);">6</div>
+      <div class="step-body">
+        <h3>Data Warehouse en PostgreSQL (RDS)</h3>
+        <p>Base de datos <code>shopstream</code> en RDS PostgreSQL dentro de VPC. Esquema estrella: 3 dimensiones (users, products, dates) y 6 tablas de hecho con los resultados del análisis. Aquí viven los 20 top pages, 362 anomalías y los resúmenes de sesión.</p>
+        <div class="detail">
+          <span class="chip chip-green">RDS PostgreSQL · shopstream.*</span>
+          <span class="chip chip-blue">3 dim + 6 fact</span>
+          <span class="chip chip-orange">20 / 24 / 362 filas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num" style="border-color:rgba(57,211,83,.5);color:var(--teal);">7</div>
+      <div class="step-body">
+        <h3>API REST expone los datos al mundo</h3>
+        <p>Flask con 3 endpoints desplegada en Lambda vía Zappa + API Gateway. Conecta directamente a RDS con psycopg2. 13 tests unitarios, CI/CD con GitHub Actions (flake8 + pytest en cada push). Responde en JSON listo para consumir.</p>
+        <div class="detail">
+          <span class="chip chip-teal">Flask · Lambda · Zappa</span>
+          <span class="chip chip-blue">3 endpoints activos</span>
+          <span class="chip chip-green">13 tests · CI/CD</span>
+          <span class="chip chip-orange">GitHub Actions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTPUTS REALES -->
+  <div class="section-title">Resultados reales en producción</div>
+  <div class="outputs-grid">
+    <div class="output-card">
+      <div class="oc-icon">📄</div>
+      <h4>Top páginas por tiempo</h4>
+      <p>20 URLs rankeadas por tiempo promedio de permanencia del usuario.</p>
+      <div class="stat" style="color:var(--accent);">20</div>
+      <div class="stat-label">filas · fact_page_metrics</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">📱</div>
+      <h4>Sesiones por dispositivo/país</h4>
+      <p>CO + mobile: 15,630 vistas, 118.8 s promedio. Desglose por combinación.</p>
+      <div class="stat" style="color:var(--orange);">24</div>
+      <div class="stat-label">filas · fact_session_summary</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">🔍</div>
+      <h4>Anomalías detectadas</h4>
+      <p>Sesiones estadísticamente atípicas (z-score hasta 5.78). Bot-like y outliers.</p>
+      <div class="stat" style="color:var(--red);">362</div>
+      <div class="stat-label">filas · fact_anomalies</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">🧪</div>
+      <h4>Cobertura de tests</h4>
+      <p>Tests unitarios con moto (mock AWS) + psycopg2 mock. Corre en GitHub Actions.</p>
+      <div class="stat" style="color:var(--green);">13/13</div>
+      <div class="stat-label">tests · todos en verde</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">⚙️</div>
+      <h4>Glue Workflow automatizado</h4>
+      <p>Trigger diario 2 AM UTC + trigger condicional en cascada al éxito del job.</p>
+      <div class="stat" style="color:var(--yellow);">2 AM</div>
+      <div class="stat-label">ejecución diaria · UTC</div>
+    </div>
+    <div class="output-card">
+      <div class="oc-icon">🏗️</div>
+      <h4>Tablas en el Data Warehouse</h4>
+      <p>Esquema estrella completo con 3 dimensiones y 6 hechos en PostgreSQL.</p>
+      <div class="stat" style="color:var(--purple);">3 + 6</div>
+      <div class="stat-label">dim + fact · PostgreSQL</div>
+    </div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div class="section-title">Equipo y responsabilidades</div>
+  <div class="team-row">
+    <div class="team-card">
+      <div class="avatar" style="background:rgba(88,166,255,.15);color:var(--accent);">A</div>
+      <h4>Alan</h4>
+      <p style="color:var(--accent);font-size:12px;font-weight:600;">Infraestructura & Pipeline</p>
+      <ul>
+        <li>S3 + Lambda + Particionado</li>
+        <li>Glue Crawler + Catalog</li>
+        <li>Glue ETL + Workflow</li>
+        <li>Scripts & Credenciales</li>
+      </ul>
+    </div>
+    <div class="team-card">
+      <div class="avatar" style="background:rgba(210,168,255,.15);color:var(--purple);">D</div>
+      <h4>Daniela</h4>
+      <p style="color:var(--purple);font-size:12px;font-weight:600;">Procesamiento & Análisis</p>
+      <ul>
+        <li>EMR Cluster (PySpark)</li>
+        <li>6 métricas de comportamiento</li>
+        <li>Detección de anomalías</li>
+        <li>Data Warehouse (RDS schema)</li>
+      </ul>
+    </div>
+    <div class="team-card">
+      <div class="avatar" style="background:rgba(57,211,83,.15);color:var(--teal);">Ana</div>
+      <h4>Ana</h4>
+      <p style="color:var(--teal);font-size:12px;font-weight:600;">API & Calidad</p>
+      <ul>
+        <li>Flask API (3 endpoints)</li>
+        <li>Zappa → Lambda + API GW</li>
+        <li>13 tests unitarios</li>
+        <li>CI/CD · GitHub Actions</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BANNER FINAL -->
+  <div class="banner">
+    <div class="all-good">
+      <span>✓</span> Todos los requerimientos del parcial cumplidos
+    </div>
+    <h2>Pipeline 100% operativo en AWS</h2>
+    <p>
+      Desde un archivo de 166 MB en S3 hasta una API REST en producción — pasando por Lambda, EMR, Glue y PostgreSQL.
+      Datos reales, tests reales, automatización real.
+    </p>
+    <div style="margin-top:24px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px;">
+      <span class="chip chip-green" style="padding:6px 16px;font-size:12px;">S3 ✓</span>
+      <span class="chip chip-orange" style="padding:6px 16px;font-size:12px;">Lambda ✓</span>
+      <span class="chip chip-purple" style="padding:6px 16px;font-size:12px;">EMR ✓</span>
+      <span class="chip chip-yellow" style="padding:6px 16px;font-size:12px;">Glue ✓</span>
+      <span class="chip chip-blue" style="padding:6px 16px;font-size:12px;">RDS ✓</span>
+      <span class="chip chip-teal" style="padding:6px 16px;font-size:12px;">API ✓</span>
+      <span class="chip chip-green" style="padding:6px 16px;font-size:12px;">Tests ✓</span>
+      <span class="chip chip-orange" style="padding:6px 16px;font-size:12px;">CI/CD ✓</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

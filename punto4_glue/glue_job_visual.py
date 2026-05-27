@@ -1,4 +1,5 @@
 import sys
+import os
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -13,11 +14,13 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
+# Credentials via Glue job parameters (--RDS_USER / --RDS_PASSWORD)
+# or environment variables. Set in the Glue job configuration, not here.
 JDBC_URL = "jdbc:postgresql://shopstream-rds-dw.cavmfs9savk3.us-east-1.rds.amazonaws.com:5432/postgres"
 JDBC_OPTS = {
     "url": JDBC_URL,
-    "user": "Admin_postgres",
-    "password": "parcialfinal3",
+    "user": os.environ.get("RDS_USER", "Admin_postgres"),
+    "password": os.environ.get("RDS_PASSWORD", ""),
     "driver": "org.postgresql.Driver",
 }
 
